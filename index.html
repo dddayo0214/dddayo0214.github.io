@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人作品集</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="my_webside.css">
+</head>
+
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    <div class="background-animation"></div>
+
+    <nav>
+        <div class="nav-content">
+            <div class="logo">tsai alan的歡樂小屋</div>
+            <div class="nav-links">
+                <a href="#home">首頁</a>
+                <a href="#about">關於</a>
+                <a href="#projects">作品</a>
+                <a href="#contact">聯絡</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>tsai alan</h1>
+            <p>網頁開發者 / 設計師</p>
+            <div class="social-links">
+                <a href="https://github.com/DDDAYO0214"><i class="fab fa-github"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=100006945799099"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/alan_c8c8?igsh=MTM2bWU4czlxNTYzdw=="><i
+                        class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="about-content">
+            <div class="about-image">
+                <img src="hinano.png" alt="個人照片">
+            </div>
+            <div class="about-text">
+                <h2>關於我</h2>
+                <p>在這裡寫下您的自我介紹，包括您的專業背景、技能和興趣。讓訪客更了解您的專業領域和個人特質。</p>
+                <p>描述您的工作經驗和專業成就，以及您對未來的期望和目標。</p>
+                <div class="skills">
+                    <h3>專業技能</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">unity</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">C#</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects" id="projects">
+        <h2>作品集</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <img src="hinano.png" alt="專案一">
+                <div class="project-info">
+                    <h3>專案一</h3>
+                    <p>這是一個很棒的專案描述</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="hinano.png" alt="專案二">
+                <div class="project-info">
+                    <h3>專案二</h3>
+                    <p>另一個精彩的專案描述</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="hinano.png" alt="專案三">
+                <div class="project-info">
+                    <h3>專案三</h3>
+                    <p>第三個令人驚嘆的專案</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2>聯絡我</h2>
+        <p>歡迎與我聯繫!</p>
+        <div class="contact-links">
+            <a href="mailto:alan0960214@email.com@email.com" class="contact-link">
+                <i class="fas fa-envelope"></i>
+                <span>alan0960214@email.com</span>
+            </a>
+            <a href="https://github.com/DDDAYO0214" class="contact-link">
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100006945799099" class="contact-link">
+                <i class="fab fa-facebook"></i>
+                <span>FB</span>
+            </a>
+            <a href="https://www.instagram.com/alan_c8c8?igsh=MTM2bWU4czlxNTYzdw" class="contact-link">
+                <i class="fab fa-instagram"></i>
+                <span>IG</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // 滑鼠跟隨效果
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
+            cursorFollower.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+        });
+
+        // 鼠標hover效果
+        const links = document.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.5)';
+                cursorFollower.style.transform = 'scale(1.5)';
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursorFollower.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+
+</html>
