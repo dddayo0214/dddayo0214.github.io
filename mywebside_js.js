@@ -1,23 +1,73 @@
 // 滑鼠跟隨效果
-const cursor = document.querySelector('.cursor');
-const cursorFollower = document.querySelector('.cursor-follower');
+// const cursor = document.querySelector('.cursor');
+// const cursorFollower = document.querySelector('.cursor-follower');
+
+// document.addEventListener('mousemove', (e) => {
+//     cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
+//     cursorFollower.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+// });
+
+// // 鼠標hover效果
+// const links = document.querySelectorAll('a');
+// links.forEach(link => {
+//     link.addEventListener('mouseenter', () => {
+//         cursor.style.transform = 'scale(1.5)';
+//         cursorFollower.style.transform = 'scale(1.5)';
+//     });
+//     link.addEventListener('mouseleave', () => {
+//         cursor.style.transform = 'scale(1)';
+//         cursorFollower.style.transform = 'scale(1)';
+//     });
+// });
+
+// 更新游標移動邏輯
+const cursor = document.querySelector('.custom-cursor');
+
+// 平滑跟隨滑鼠
+let mouseX = 0;
+let mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
 
 document.addEventListener('mousemove', (e) => {
-    cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
-    cursorFollower.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
 });
 
-// 鼠標hover效果
-const links = document.querySelectorAll('a');
+// 使用 requestAnimationFrame 實現更平滑的移動
+function updateCursor() {
+    const dx = mouseX - cursorX;
+    const dy = mouseY - cursorY;
+
+    cursorX += dx * 0.1; // 調整這個數值可以改變跟隨速度
+    cursorY += dy * 0.1;
+
+    cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+
+    requestAnimationFrame(updateCursor);
+}
+
+updateCursor();
+
+// 滑鼠互動效果
+const links = document.querySelectorAll('a, button');
 links.forEach(link => {
     link.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(1.5)';
-        cursorFollower.style.transform = 'scale(1.5)';
+        cursor.classList.add('link-hover');
     });
+
     link.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        cursorFollower.style.transform = 'scale(1)';
+        cursor.classList.remove('link-hover');
     });
+});
+
+// 處理頁面載入和離開視窗的情況
+document.addEventListener('mouseenter', () => {
+    cursor.style.opacity = 1;
+});
+
+document.addEventListener('mouseleave', () => {
+    cursor.style.opacity = 0;
 });
 
 // 添加時間軸動畫
