@@ -6,30 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人作品集</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="wy.css">
+    <link rel="stylesheet" href="mywebside_css.css">
+    <script src="mywebside_js.js" async></script>
 </head>
 
 <body>
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
     <div class="background-animation"></div>
+    <div class="scroll-progress"></div>
+    <!-- 保持原有的 cursor 相關 div -->
 
     <nav>
         <div class="nav-content">
-            <div class="logo">tsai alan的歡樂小屋</div>
+            <div class="logo">Tsai alan的歡樂小屋</div>
             <div class="nav-links">
-                <a href="#home">首頁</a>
+                <a href="#home" class="active">首頁</a>
                 <a href="#about">關於</a>
+                <a href="#timeline">歷程</a>
                 <a href="#projects">作品</a>
                 <a href="#contact">聯絡</a>
+                <div class="nav-indicator"></div>
             </div>
         </div>
     </nav>
 
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>tsai alan</h1>
-            <p>網頁開發者 / 設計師</p>
+            <h1>Tsai alan</h1>
+            <p>程式設計者 / 運動員</p>
             <div class="social-links">
                 <a href="https://github.com/DDDAYO0214"><i class="fab fa-github"></i></a>
                 <a href="https://www.facebook.com/profile.php?id=100006945799099"><i class="fab fa-facebook"></i></a>
@@ -46,14 +51,17 @@
             </div>
             <div class="about-text">
                 <h2>關於我</h2>
-                <p>在這裡寫下您的自我介紹，包括您的專業背景、技能和興趣。讓訪客更了解您的專業領域和個人特質。</p>
-                <p>描述您的工作經驗和專業成就，以及您對未來的期望和目標。</p>
+                <p>我是蔡昇倫，目前就讀於中和高中，對科技充滿好奇。</p>
+                <p>我主動學習新的程式語言與技術，希望能夠提升自己的能力。</p>
+                <p> 此外，我也熱愛運動，桌球是我最喜歡的運動之一。</p>
+                <p>這項運動不僅讓我鍛鍊體能，也培養了我的耐心與毅力。</p>
+                <p>未來，我希望能夠將程式設計的專長發揮在更廣泛的領域，我會持續努力學習，精進自己的能力，朝著成為一名優秀工程師的目標邁進。</p>
                 <div class="skills">
                     <h3>專業技能</h3>
                     <div class="skill-tags">
                         <span class="skill-tag">HTML</span>
                         <span class="skill-tag">CSS</span>
-                        <span class="skill-tag">unity</span>
+                        <span class="skill-tag">python</span>
                         <span class="skill-tag">C++</span>
                         <span class="skill-tag">C#</span>
                     </div>
@@ -89,6 +97,61 @@
         </div>
     </section>
 
+    <section class="timeline" id="timeline">
+        <h2>人生歷程</h2>
+        <div class="timeline-container">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <i class="fas fa-calendar-alt"></i> 2024
+                    </div>
+                    <div class="timeline-title">現在</div>
+                    <p>正在體驗中。</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <i class="fas fa-calendar-alt"></i> 2022 - 2023
+                    </div>
+                    <div class="timeline-title">高中生涯</div>
+                    <p>程式設計開始。</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <i class="fas fa-calendar-alt"></i> 2018 - 2022
+                    </div>
+                    <div class="timeline-title">國中生涯</div>
+                    <p>美術班中的普通生。</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <i class="fas fa-calendar-alt"></i> 2018
+                    </div>
+                    <div class="timeline-title">國小生涯</div>
+                    <p>天真無邪愛玩的桌球隊隊員。</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <i class="fas fa-calendar-alt"></i> 2018
+                    </div>
+                    <div class="timeline-title">歡樂時期</div>
+                    <p>hehe。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="contact" id="contact">
         <h2>聯絡我</h2>
         <p>歡迎與我聯繫!</p>
@@ -111,30 +174,6 @@
             </a>
         </div>
     </section>
-
-    <script>
-        // 滑鼠跟隨效果
-        const cursor = document.querySelector('.cursor');
-        const cursorFollower = document.querySelector('.cursor-follower');
-
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
-            cursorFollower.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
-        });
-
-        // 鼠標hover效果
-        const links = document.querySelectorAll('a');
-        links.forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursor.style.transform = 'scale(1.5)';
-                cursorFollower.style.transform = 'scale(1.5)';
-            });
-            link.addEventListener('mouseleave', () => {
-                cursor.style.transform = 'scale(1)';
-                cursorFollower.style.transform = 'scale(1)';
-            });
-        });
-    </script>
 </body>
 
 </html>
