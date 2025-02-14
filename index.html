@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="hinano.png" type="image/x-icon">
+    <link rel="shortcut icon" href="merterial/hinano.png" type="image/x-icon">
     <title>Tsai alan的小屋</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="mywebside_css.css">
@@ -12,19 +12,48 @@
 </head>
 
 <body>
-    <!-- <div class="cursor"></div> -->
-    <div class="custom-cursor">
-        <img src="hinano.png" alt="custom cursor">
+    <div class="custom-cursor" id="bodytop">
+        <img src="merterial/rocket.png" alt="custom cursor" id="bodytop_">
     </div>
-    <div class="cursor-follower"></div>
+    <div class="custom-cursorFollower">
+        <img src="merterial/comet.png" alt="custom cursorFollower">
+    </div>
     <div class="background-animation"></div>
     <div class="scroll-progress"></div>
+    <div class="image-overlay" id="學科能力競賽">
+        <span class="close-btn">&times;</span>
+        <img id="fullImage" src="merterial/市賽資訊佳作.jpg" alt="完整大圖">
+    </div>
+    <div class="image-overlay" id="多益">
+        <span class="close-btn">&times;</span>
+        <img id="fullImage" src="merterial/toeic715.jpg" alt="完整大圖">
+    </div>
+    <div class="image-overlay" id="ncku邀請賽">
+        <span class="close-btn">&times;</span>
+        <img id="fullImage" src="merterial/ncku邀請賽.jpg" alt="完整大圖">
+    </div>
+    <div class="image-overlay" id="英檢中級">
+        <span class="close-btn">&times;</span>
+        <img id="fullImage" src="merterial/英檢中級.jpg" alt="完整大圖">
+    </div>
+    <div class="image-overlay" id="動物育望">
+        <span class="close-btn">&times;</span>
+        <img id="fullImage" src="merterial/動物育望.jpg" alt="完整大圖">
+    </div>
+    <div class="image-overlay" id="動物育望佳作">
+        <span class="close-btn">&times;</span>
+        <img id="fullImage" src="merterial/動物育望佳作.jpg" alt="完整大圖">
+    </div>
+    <div class="image-overlay" id="獎牌">
+        <span class="close-btn">&times;</span>
+        <img id="fullImage" src="merterial/獎牌.jpg" alt="完整大圖">
+    </div>
 
     <nav>
         <div class="nav-content">
             <div class="nav-wight">
                 <div class="nav-logo">
-                    <img src="hinano.png" alt="logo">
+                    <img src="merterial/hinano.png" alt="logo">
                 </div>
                 <div class="logo">Tsai alan的歡樂小屋</div>
             </div>
@@ -41,21 +70,60 @@
 
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>Tsai alan</h1>
-            <p>程式設計者 / 運動員</p>
+            <h1>歡迎來到Tsai alan的網站</h1>
+            <p>程式設計師 / 運動員</p>
             <div class="social-links">
                 <a href="https://github.com/DDDAYO0214"><i class="fab fa-github"></i></a>
                 <a href="https://www.facebook.com/profile.php?id=100006945799099"><i class="fab fa-facebook"></i></a>
                 <a href="https://www.instagram.com/alan_c8c8?igsh=MTM2bWU4czlxNTYzdw=="><i
                         class="fab fa-instagram"></i></a>
             </div>
-        </div>
+            <div class="tools-container">
+                <h1>我的開發工具集</h1>
+
+                <div class="tool-card" onclick="toggleDescription('vscode')">
+                    <div class="tool-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h2 class="tool-title">Visual Studio Code</h2>
+                    </div>
+                    <div class="tool-description" id="vscode-description">
+                        <p>Visual Studio Code是我主要使用的程式碼編輯器。</p>
+                        <ul>
+                            <li>強大的智能代碼補全</li>
+                            <li>豐富的擴充套件生態系統</li>
+                            <li>整合式終端機</li>
+                            <li>Git版本控制整合</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card" onclick="toggleDescription('google')">
+                    <div class="tool-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <h2 class="tool-title">Google</h2>
+                    </div>
+                    <div class="tool-description" id="google-description">
+                        <p>Google提供多項實用的開發工具</p>
+                        <ul>
+                            <li>強大的搜尋引擎，快速找到解決方案</li>
+                            <li>Chrome DevTools用於網頁除錯</li>
+                            <li>Google Fonts免費字型資源</li>
+                            <li>Google搜尋控制台協助優化網站</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
     </section>
 
     <section class="about" id="about">
         <div class="about-content">
             <div class="about-image">
-                <img src="hinano.png" alt="個人照片">
+                <img src="merterial/hinano.png" alt="個人照片">
             </div>
             <div class="about-text">
                 <h2>關於我</h2>
@@ -84,7 +152,7 @@
             <div class="timeline-item">
                 <div class="timeline-content">
                     <div class="timeline-date">
-                        <i class="fas fa-calendar-alt"></i> 2024
+                        <i class="fas fa-calendar-alt"></i> now
                     </div>
                     <div class="timeline-title">現在</div>
                     <p>正在體驗中。</p>
@@ -94,20 +162,46 @@
             <div class="timeline-item">
                 <div class="timeline-content">
                     <div class="timeline-date">
-                        <i class="fas fa-calendar-alt"></i> 2022 - 2023
+                        <i class="fas fa-calendar-alt"></i> 2021 - now
                     </div>
                     <div class="timeline-title">高中生涯</div>
-                    <p>程式設計開始。</p>
+                    <p>開始學習程式設計。</p>
+                    <div class="timeline-achievements">成果
+                        <div class="image-container">
+                            <div class="image-link" onclick="toggleAchievements('學科能力競賽')">
+                                學科能力競賽
+                            </div>
+                            <div class="image-link" onclick="toggleAchievements('多益')">
+                                多益
+                            </div>
+                            <div class="image-link" onclick="toggleAchievements('ncku邀請賽')">
+                                ncku邀請賽
+                            </div>
+                            <div class="image-link" onclick="toggleAchievements('英檢中級')">
+                                英檢中級
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="timeline-content">
                     <div class="timeline-date">
-                        <i class="fas fa-calendar-alt"></i> 2018 - 2022
+                        <i class="fas fa-calendar-alt"></i> 2018 - 2021
                     </div>
                     <div class="timeline-title">國中生涯</div>
                     <p>美術班中的普通生。</p>
+                    <div class="timeline-achievements">成果
+                        <div class="image-container">
+                            <div class="image-link" onclick="toggleAchievements('動物育望')">
+                                動物育望
+                            </div>
+                            <div class="image-link" onclick="toggleAchievements('動物育望佳作')">
+                                動物育望佳作
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -118,6 +212,13 @@
                     </div>
                     <div class="timeline-title">國小生涯</div>
                     <p>天真無邪愛玩的桌球隊隊員。</p>
+                    <div class="timeline-achievements">成果
+                        <div class="image-container">
+                            <div class="image-link" onclick="toggleAchievements('獎牌')">
+                                各種獎牌
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -127,7 +228,7 @@
                         <i class="fas fa-calendar-alt"></i> 2018
                     </div>
                     <div class="timeline-title">歡樂時期</div>
-                    <p>hehe。</p>
+                    <p>hehe :D。</p>
                 </div>
             </div>
         </div>
@@ -137,21 +238,21 @@
         <h2>作品集</h2>
         <div class="project-grid">
             <div class="project-card">
-                <img src="hinano.png" alt="專案一">
+                <img src="merterial/敬請期待.png" alt="專案一">
                 <div class="project-info">
                     <h3>專案一</h3>
                     <p>這是一個很棒的專案描述</p>
                 </div>
             </div>
             <div class="project-card">
-                <img src="hinano.png" alt="專案二">
+                <img src="merterial/敬請期待.png" alt="專案二">
                 <div class="project-info">
                     <h3>專案二</h3>
                     <p>另一個精彩的專案描述</p>
                 </div>
             </div>
             <div class="project-card">
-                <img src="hinano.png" alt="專案三">
+                <img src="merterial/敬請期待.png" alt="專案三">
                 <div class="project-info">
                     <h3>專案三</h3>
                     <p>第三個令人驚嘆的專案</p>
@@ -182,6 +283,16 @@
             </a>
         </div>
     </section>
+
+    <!-- <div class="giftbox-container">
+        <div class="gift-box" id="giftBox">
+            <div class="box-lid"></div>
+            <div class="box-base"></div>
+            <div class="ribbon"></div>
+            <div class="gift-text" id="giftText">感謝你的陪伴與支持！</div>
+        </div>
+    </div> -->
+
 </body>
 
 </html>

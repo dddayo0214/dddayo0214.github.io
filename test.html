@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>禮物盒</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f8fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .gift-box {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.05);
+        }
+
+        .box-lid {
+            position: absolute;
+            width: 100%;
+            height: 30%;
+            background: #e74c3c;
+            top: 0;
+            border-radius: 5px 5px 0 0;
+            transform-origin: bottom;
+            transition: transform 0.5s ease;
+        }
+
+        .box-base {
+            position: absolute;
+            width: 100%;
+            height: 70%;
+            background: #c0392b;
+            bottom: 0;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .ribbon {
+            position: absolute;
+            width: 30px;
+            height: 80%;
+            background: #2980b9;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            z-index: 2;
+        }
+
+        .ribbon::before,
+        .ribbon::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            background: #2980b9;
+            border-radius: 15px;
+        }
+
+        .ribbon::before {
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%) rotate(90deg);
+        }
+
+        .ribbon::after {
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .gift-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 80%;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f39c12;
+            opacity: 0;
+        }
+
+        .open .box-lid {
+            transform: rotateX(-110deg);
+        }
+
+        .open .gift-text {
+            opacity: 1;
+            z-index: 3;
+        }
+
+        /* 添加彩花動畫狀態 */
+        .active-confetti {
+            animation: fall 1.5s ease-out forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(1000px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gift-box" id="giftBox">
+        <div class="box-lid"></div>
+        <div class="box-base"></div>
+        <div class="ribbon"></div>
+        <div class="gift-text" id="giftText">感謝你的陪伴與支持！</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const giftBox = document.getElementById('giftBox');
+            const giftText = document.getElementById('giftText');
+
+            // 設置可自定義的文字
+            let customMessage = '感謝你的陪伴與支持！';
+
+            // 可以在這裡更改文字內容
+            giftText.textContent = customMessage;
+
+            giftBox.addEventListener('click', () => {
+                // 開啟禮物盒
+                giftBox.classList.add('open');
+
+                // 生成彩花
+                createConfetti();
+            });
+
+            function createConfetti() {
+                // 移除舊的彩花
+                document.querySelectorAll('.confetti').forEach(el => el.remove());
+
+                // 彩花顏色
+                const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
+
+                // 創建30個彩花
+                for (let i = 0; i < 30; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+
+                    // 隨機位置
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.top = `${Math.random() * 100}px`;
+
+                    // 隨機大小
+                    const size = Math.floor(Math.random() * 10) + 5;
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size}px`;
+
+                    // 隨機形狀（方形或圓形）
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+
+                    // 隨機顏色
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                    // 隨機動畫延遲
+                    confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+
+                    document.body.appendChild(confetti);
+
+                    // 加入動畫類別
+                    setTimeout(() => {
+                        confetti.classList.add('active-confetti');
+                    }, 10);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

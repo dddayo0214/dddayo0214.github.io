@@ -9,6 +9,7 @@ body {
     background: #0f172a;
     color: white;
     overflow-x: hidden;
+    /* cursor: none; */
 }
 
 /* 背景動畫 */
@@ -182,10 +183,183 @@ nav {
     margin-bottom: 2rem;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        max-height: 500px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tools-container {
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.tool-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out backwards;
+}
+
+.tool-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.tool-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.tool-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tool-card:active::after {
+    opacity: 1;
+    transition: opacity 0.1s;
+}
+
+.tool-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tool-icon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-card:hover .tool-icon {
+    transform: rotate(5deg);
+}
+
+.tool-title {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.tool-card:hover .tool-title {
+    color: #3498db;
+}
+
+.tool-description {
+    color: #666;
+    line-height: 1.6;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-description.active {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.tool-description ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.tool-description li {
+    margin: 8px 0;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease-out;
+}
+
+.tool-description.active li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.tool-description.active li:nth-child(1) {
+    transition-delay: 0.1s;
+}
+
+.tool-description.active li:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.tool-description.active li:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.tool-description.active li:nth-child(4) {
+    transition-delay: 0.4s;
+}
+
+.fa-google {
+    color: #4285F4;
+}
+
+.fa-code {
+    color: #007ACC;
+}
+
 .social-links {
     display: flex;
     gap: 1rem;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
 .social-links a {
@@ -399,6 +573,13 @@ nav {
     font-weight: bold;
 }
 
+.timeline-achievements {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
 @keyframes slideIn {
     to {
         opacity: 1;
@@ -425,6 +606,80 @@ nav {
         left: -67px;
         right: auto;
     }
+}
+
+.achievements-card {
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out backwards;
+}
+
+.achievements-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.achievements-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.achievements-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.achievements-card:active::after {
+    opacity: 1;
+    transition: opacity 0.1s;
+}
+
+.achievements-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.achievements-card:hover .tool-icon {
+    transform: rotate(5deg);
+}
+
+.achievements-title {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.achievements-card:hover .tool-title {
+    color: #3498db;
+}
+
+.achievements-description {
+    color: #666;
+    line-height: 1.6;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.achievements-description.active {
+    max-height: 500px;
+    opacity: 1;
 }
 
 /* 聯絡區塊 */
@@ -474,25 +729,6 @@ nav {
     }
 }
 
-/* 滑鼠跟隨效果 */
-.cursor {
-    width: 20px;
-    height: 20px;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s;
-}
-
-.cursor-follower {
-    width: 40px;
-    height: 40px;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    transition: transform 0.3s;
-}
-
 @keyframes fadeInUp {
     to {
         opacity: 1;
@@ -505,9 +741,21 @@ nav {
     width: 50px;
     height: 50px;
     position: fixed;
+    transform-origin: 20px 20px;
     pointer-events: none;
     z-index: 9999;
-    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    /* animation: rotate 2s infinite; */
+    /* background: url('/merterial/下載\ \(1\).png') no-repeat center center; */
+}
+
+.custom-cursor.moving {
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    transform-origin: 20px 20px;
+    pointer-events: none;
+    z-index: 9999;
     transition: transform 0.1s ease;
 }
 
@@ -515,11 +763,74 @@ nav {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transform-origin: 20px 20px;
+    /* animation: pulse 2s infinite;
+    animation: rotate 2s linear infinite; */
+}
+
+.custom-cursorFollower {
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    /* transform: translate(-50%, -50%); */
+    transition: transform 0.1s ease;
+}
+
+.custom-cursorFollower img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* animation: rotate 2s linear infinite; */
 }
 
 /* hover 效果 */
 .custom-cursor.link-hover {
     transform: translate(-50%, -50%) scale(1.2);
+}
+
+.custom-cursorFollower.link-hover {
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.trail {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: rgb(225, 72, 38);
+    border-radius: 50%;
+    z-index: 9999;
+    pointer-events: none;
+    transform-origin: 20px 20px;
+    transition: transform 0.1s ease;
 }
 
 /* 在手機裝置上隱藏自訂游標 */
@@ -531,6 +842,32 @@ nav {
     .custom-cursor {
         display: none;
     }
+
+    .custom-cursorFollower {
+        display: none;
+    }
+}
+
+.copy-right {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s forwards;
+}
+
+.bottom {
+    height: 10vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.copy-right a {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
 }
 
 /* 響應式設計 */
@@ -556,5 +893,204 @@ nav {
     .contact-links {
         flex-direction: column;
         align-items: center;
+    }
+}
+
+/* 成果圖片 */
+.image-container {
+    max-width: none;
+    width: auto;
+    margin: 0;
+    text-align: left;
+    position: relative;
+}
+
+.image-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    z-index: 999999 !important;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.fullImage {
+    max-width: 95% !important;
+    max-height: 95% !important;
+    object-fit: contain !important;
+}
+
+.image-link {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 18px;
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #004170;
+    border-radius: 5px;
+}
+
+.image-link:hover {
+    color: #2980b9;
+    background-color: #d0d0d0;
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#fullImage {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.gift-box {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+.gift-box:hover {
+    transform: scale(1.05);
+}
+
+.box-lid {
+    position: absolute;
+    width: 100%;
+    height: 30%;
+    background: #e74c3c;
+    top: 0;
+    border-radius: 5px 5px 0 0;
+    transform-origin: bottom;
+    transition: transform 0.5s ease;
+}
+
+.box-base {
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    background: #c0392b;
+    bottom: 0;
+    border-radius: 0 0 5px 5px;
+}
+
+.ribbon {
+    position: absolute;
+    width: 30px;
+    height: 80%;
+    background: #2980b9;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    z-index: 2;
+}
+
+.ribbon::before,
+.ribbon::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 30px;
+    background: #2980b9;
+    border-radius: 15px;
+}
+
+.ribbon::before {
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+}
+
+.ribbon::after {
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.giftbox-container {
+    background-color: #f5f8fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.gift-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 80%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #f39c12;
+    opacity: 0;
+}
+
+.open .box-lid {
+    transform: rotateX(-110deg);
+}
+
+.open .gift-text {
+    opacity: 1;
+    z-index: 3;
+}
+
+/* 添加彩花動畫狀態 */
+.active-confetti {
+    animation: fall 1.5s ease-out forwards;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(1000px) rotate(360deg);
+        opacity: 0;
     }
 }
