@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>禮物盒</title>
+    <title>3D禮物盒</title>
     <style>
+        /* 前面的樣式保持不變 */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            user-select: none;
         }
 
         body {
@@ -19,109 +20,99 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            perspective: 1000px;
             overflow: hidden;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
 
-        .gift-box {
+        .scene {
             width: 200px;
             height: 200px;
             position: relative;
-            cursor: pointer;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease;
+            perspective: 1000px;
         }
 
-        .gift-box:hover {
-            transform: scale(1.05);
+        .gift-box {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg);
+            cursor: pointer;
         }
 
         .box-lid {
             position: absolute;
             width: 100%;
-            height: 30%;
-            background: #e74c3c;
+            height: 40px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
             top: 0;
-            border-radius: 5px 5px 0 0;
-            transform-origin: bottom;
-            transition: transform 0.5s ease;
+            left: 0;
+            border-radius: 5px;
+            transform-origin: center;
+            cursor: grab;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transform-style: preserve-3d;
+            z-index: 100;
+        }
+
+        .box-lid.dragging {
+            cursor: grabbing;
+            opacity: 0.9;
         }
 
         .box-base {
             position: absolute;
             width: 100%;
-            height: 70%;
-            background: #c0392b;
+            height: calc(100% - 40px);
+            background: linear-gradient(45deg, #d35400, #e67e22);
             bottom: 0;
-            border-radius: 0 0 5px 5px;
-        }
-
-        .ribbon {
-            position: absolute;
-            width: 30px;
-            height: 80%;
-            background: #2980b9;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 0;
-            z-index: 2;
-        }
-
-        .ribbon::before,
-        .ribbon::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 30px;
-            background: #2980b9;
-            border-radius: 15px;
-        }
-
-        .ribbon::before {
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%) rotate(90deg);
-        }
-
-        .ribbon::after {
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
+            border-radius: 5px;
+            transform-style: preserve-3d;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .gift-text {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) translateZ(1px);
             background: white;
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 10px;
             text-align: center;
-            max-width: 80%;
+            font-size: 18px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             opacity: 0;
             transition: opacity 0.5s ease;
-            z-index: 1;
+            z-index: 10;
+            pointer-events: none;
         }
 
         .confetti {
-            position: absolute;
+            position: fixed;
             width: 10px;
             height: 10px;
             background: #f39c12;
             opacity: 0;
+            pointer-events: none;
         }
 
-        .open .box-lid {
-            transform: rotateX(-110deg);
+        @keyframes dropLid {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(150px, 100px) rotate(20deg);
+            }
         }
 
-        .open .gift-text {
-            opacity: 1;
-            z-index: 3;
+        .box-lid.dropped {
+            animation: dropLid 0.5s forwards cubic-bezier(0.3, 0.7, 0.4, 1.4);
         }
 
-        /* 添加彩花動畫狀態 */
         .active-confetti {
             animation: fall 1.5s ease-out forwards;
         }
@@ -137,72 +128,233 @@
                 opacity: 0;
             }
         }
+
+        .floor {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+            transform: rotateX(90deg);
+            transform-origin: bottom;
+        }
+
+        .ribbon {
+            position: absolute;
+            width: 30px;
+            height: 60%;
+            background: #3498db;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        .ribbon::before,
+        .ribbon::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            background: #2980b9;
+            border-radius: 15px;
+            transition: all 0.5s ease;
+        }
+
+        .ribbon::before {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(90deg);
+        }
+
+        .ribbon::after {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ribbon.untied {
+            transform: translateX(-50%) scaleY(0);
+        }
+
+        .ribbon.untied::before {
+            transform: translateX(-150%) rotate(45deg);
+        }
+
+        .ribbon.untied::after {
+            transform: translateX(50%) rotate(-45deg);
+        }
+
+        .reset-hint {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .reset-hint.visible {
+            opacity: 1;
+        }
     </style>
 </head>
 
 <body>
-    <div class="gift-box" id="giftBox">
-        <div class="box-lid"></div>
-        <div class="box-base"></div>
-        <div class="ribbon"></div>
-        <div class="gift-text" id="giftText">感謝你的陪伴與支持！</div>
+    <div class="reset-hint" id="resetHint">拖動蓋子回到禮物盒頂端以重置</div>
+    <div class="floor"></div>
+    <div class="scene">
+        <div class="gift-box" id="giftBox">
+            <div class="box-lid" id="boxLid"></div>
+            <div class="box-base"></div>
+            <div class="ribbon" id="ribbon"></div>
+        </div>
+        <div class="gift-text" id="giftText">生日快樂！</div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const giftBox = document.getElementById('giftBox');
+            const boxLid = document.getElementById('boxLid');
             const giftText = document.getElementById('giftText');
-
-            // 設置可自定義的文字
-            let customMessage = '感謝你的陪伴與支持！';
-
-            // 可以在這裡更改文字內容
-            giftText.textContent = customMessage;
+            const giftBox = document.getElementById('giftBox');
+            const ribbon = document.getElementById('ribbon');
+            const resetHint = document.getElementById('resetHint');
+            let isLidDropped = false;
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
 
             giftBox.addEventListener('click', () => {
-                // 開啟禮物盒
-                giftBox.classList.add('open');
-
-                // 生成彩花
-                createConfetti();
+                if (!isLidDropped && !isDragging) {
+                    ribbon.classList.add('untied');
+                    setTimeout(() => {
+                        // 移除任何之前的transform樣式
+                        boxLid.style.transform = '';
+                        // 確保dropped類別被移除後再添加
+                        boxLid.classList.remove('dropped');
+                        // 強制重繪
+                        void boxLid.offsetWidth;
+                        // 添加dropped類別
+                        boxLid.classList.add('dropped');
+                        createConfetti();
+                        giftText.style.opacity = '1';
+                        resetHint.classList.add('visible');
+                    }, 500);
+                    isLidDropped = true;
+                }
             });
 
+            boxLid.addEventListener('mousedown', startDragging);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDragging);
+
+            boxLid.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startDragging(e.touches[0]);
+            });
+            document.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                drag(e.touches[0]);
+            });
+            document.addEventListener('touchend', stopDragging);
+
+            function startDragging(e) {
+                if (!isLidDropped) return;
+                isDragging = true;
+                boxLid.classList.add('dragging');
+                boxLid.classList.remove('dropped');
+
+                const rect = boxLid.getBoundingClientRect();
+                initialX = rect.left;
+                initialY = rect.top;
+                startX = e.clientX - initialX;
+                startY = e.clientY - initialY;
+
+                // 保存當前位置
+                const currentTransform = window.getComputedStyle(boxLid).transform;
+                if (currentTransform !== 'none') {
+                    boxLid.style.transform = currentTransform;
+                }
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+
+                const x = e.clientX - startX;
+                const y = e.clientY - startY;
+                boxLid.style.transform = `translate(${x}px, ${y}px)`;
+
+                if (Math.abs(x) < 50 && Math.abs(y) < 50) {
+                    resetHint.style.color = '#4CAF50';
+                } else {
+                    resetHint.style.color = 'white';
+                }
+            }
+
+            function stopDragging() {
+                if (!isDragging) return;
+                isDragging = false;
+                boxLid.classList.remove('dragging');
+
+                const transform = new DOMMatrix(getComputedStyle(boxLid).transform);
+                const x = transform.m41;
+                const y = transform.m42;
+
+                if (Math.abs(x) < 50 && Math.abs(y) < 50) {
+                    resetGiftBox();
+                }
+            }
+
+            function resetGiftBox() {
+                // 移除所有transform和動畫相關的樣式
+                boxLid.style.transform = '';
+                boxLid.style.animation = '';
+                boxLid.classList.remove('dropped');
+                ribbon.classList.remove('untied');
+                giftText.style.opacity = '0';
+                isLidDropped = false;
+                resetHint.classList.remove('visible');
+
+                // 強制重繪
+                void boxLid.offsetWidth;
+            }
+
             function createConfetti() {
-                // 移除舊的彩花
                 document.querySelectorAll('.confetti').forEach(el => el.remove());
 
-                // 彩花顏色
                 const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
 
-                // 創建30個彩花
-                for (let i = 0; i < 30; i++) {
+                for (let i = 0; i < 50; i++) {
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
 
-                    // 隨機位置
-                    confetti.style.left = `${Math.random() * 100}%`;
-                    confetti.style.top = `${Math.random() * 100}px`;
+                    confetti.style.left = `${Math.random() * window.innerWidth}px`;
+                    confetti.style.top = `${Math.random() * window.innerHeight / 2}px`;
 
-                    // 隨機大小
                     const size = Math.floor(Math.random() * 10) + 5;
                     confetti.style.width = `${size}px`;
                     confetti.style.height = `${size}px`;
 
-                    // 隨機形狀（方形或圓形）
                     confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-
-                    // 隨機顏色
                     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-                    // 隨機動畫延遲
                     confetti.style.animationDelay = `${Math.random() * 0.5}s`;
 
                     document.body.appendChild(confetti);
 
-                    // 加入動畫類別
                     setTimeout(() => {
                         confetti.classList.add('active-confetti');
                     }, 10);
+
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 2000);
                 }
             }
         });

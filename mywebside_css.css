@@ -749,7 +749,7 @@ nav {
     /* background: url('/merterial/下載\ \(1\).png') no-repeat center center; */
 }
 
-.custom-cursor.moving {
+/* .custom-cursor.moving {
     width: 50px;
     height: 50px;
     position: fixed;
@@ -757,15 +757,32 @@ nav {
     pointer-events: none;
     z-index: 9999;
     transition: transform 0.1s ease;
-}
+} */
 
 .custom-cursor img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     transform-origin: 20px 20px;
-    /* animation: pulse 2s infinite;
-    animation: rotate 2s linear infinite; */
+    /* animation-composition: accumulate; */
+    transition: transform 0.1s ease;
+    /* animation: pulse 2s infinite; */
+    /* animation: rotate 2s linear infinite; */
+}
+
+/* .custom-cursor.moving img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform-origin: 20px 20px;
+    animation: pulse 2s infinite;
+} */
+
+.rotationAnime {
+    transition: transform 0.1s ease;
+    animation: rotate 2s linear infinite;
+    transition: transform 0.1s ease;
+    /* animation-composition: accumulate; */
 }
 
 .custom-cursorFollower {
@@ -782,6 +799,7 @@ nav {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    animation-composition: accumulate;
     /* animation: rotate 2s linear infinite; */
 }
 
@@ -970,115 +988,100 @@ nav {
     z-index: 10000;
 }
 
-.gift-box {
-    width: 200px;
-    height: 200px;
-    position: relative;
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease;
-}
-
-.gift-box:hover {
-    transform: scale(1.05);
-}
-
-.box-lid {
-    position: absolute;
-    width: 100%;
-    height: 30%;
-    background: #e74c3c;
-    top: 0;
-    border-radius: 5px 5px 0 0;
-    transform-origin: bottom;
-    transition: transform 0.5s ease;
-}
-
-.box-base {
-    position: absolute;
-    width: 100%;
-    height: 70%;
-    background: #c0392b;
-    bottom: 0;
-    border-radius: 0 0 5px 5px;
-}
-
-.ribbon {
-    position: absolute;
-    width: 30px;
-    height: 80%;
-    background: #2980b9;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 0;
-    z-index: 2;
-}
-
-.ribbon::before,
-.ribbon::after {
-    content: '';
-    position: absolute;
-    width: 100px;
-    height: 30px;
-    background: #2980b9;
-    border-radius: 15px;
-}
-
-.ribbon::before {
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%) rotate(90deg);
-}
-
-.ribbon::after {
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.giftbox-container {
+.gift-container {
     background-color: #f5f8fa;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    perspective: 1000px;
     overflow: hidden;
 }
 
-.gift-text {
+.scene {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    perspective: 1000px;
+}
+
+.gift-box {
+    width: 100%;
+    height: 100%;
     position: absolute;
+    transform: rotateX(10deg);
+    cursor: pointer;
+}
+
+.box-lid {
+    position: fixed;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+    transform-origin: center;
+    cursor: grab;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.box-lid.dragging {
+    cursor: grabbing;
+    opacity: 0.9;
+}
+
+.box-base {
+    position: fixed;
+    width: 100%;
+    height: calc(100% - 40px);
+    background: linear-gradient(45deg, #d35400, #e67e22);
+    bottom: 0;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gift-text {
+    position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 15px;
+    transform: translate(-50%, -50%) translateZ(1px);
+    background: rgb(255, 73, 73);
+    padding: 15px 20px;
     border-radius: 10px;
     text-align: center;
-    max-width: 80%;
+    font-size: 18px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: opacity 0.5s ease;
-    z-index: 1;
+    z-index: 9999;
+    pointer-events: none;
 }
 
 .confetti {
-    position: absolute;
+    position: fixed;
     width: 10px;
     height: 10px;
     background: #f39c12;
     opacity: 0;
+    pointer-events: none;
 }
 
-.open .box-lid {
-    transform: rotateX(-110deg);
+@keyframes dropLid {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(150px, 100px) rotate(20deg);
+    }
 }
 
-.open .gift-text {
-    opacity: 1;
-    z-index: 3;
+.box-lid.dropped {
+    animation: dropLid 0.5s forwards cubic-bezier(0.3, 0.7, 0.4, 1.4);
 }
 
-/* 添加彩花動畫狀態 */
 .active-confetti {
     animation: fall 1.5s ease-out forwards;
 }
@@ -1093,4 +1096,81 @@ nav {
         transform: translateY(1000px) rotate(360deg);
         opacity: 0;
     }
+}
+
+.floor {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+    transform: rotateX(90deg);
+    transform-origin: bottom;
+}
+
+.ribbon {
+    position: absolute;
+    width: 30px;
+    height: 60%;
+    background: #3498db;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    z-index: 2;
+    transition: all 0.5s ease;
+}
+
+.ribbon::before,
+.ribbon::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 30px;
+    background: #2980b9;
+    border-radius: 15px;
+    transition: all 0.5s ease;
+}
+
+.ribbon::before {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+}
+
+.ribbon::after {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ribbon.untied {
+    transform: translateX(-50%) scaleY(0);
+}
+
+.ribbon.untied::before {
+    transform: translateX(-150%) rotate(45deg);
+}
+
+.ribbon.untied::after {
+    transform: translateX(50%) rotate(-45deg);
+}
+
+.reset-hint {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.reset-hint.visible {
+    opacity: 1;
 }

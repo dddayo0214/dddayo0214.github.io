@@ -8,7 +8,7 @@
     <title>Tsai alan的小屋</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="mywebside_css.css">
-    <script src="mywebside_js.js" async></script>
+    <script src="mywebside_js.js" defer></script>
 </head>
 
 <body>
@@ -16,37 +16,39 @@
         <img src="merterial/rocket.png" alt="custom cursor" id="bodytop_">
     </div>
     <div class="custom-cursorFollower">
-        <img src="merterial/comet.png" alt="custom cursorFollower">
+        <img class="rotationAnime" src="merterial/comet.png" alt="custom cursorFollower">
     </div>
     <div class="background-animation"></div>
     <div class="scroll-progress"></div>
-    <div class="image-overlay" id="學科能力競賽">
-        <span class="close-btn">&times;</span>
-        <img id="fullImage" src="merterial/市賽資訊佳作.jpg" alt="完整大圖">
-    </div>
-    <div class="image-overlay" id="多益">
-        <span class="close-btn">&times;</span>
-        <img id="fullImage" src="merterial/toeic715.jpg" alt="完整大圖">
-    </div>
-    <div class="image-overlay" id="ncku邀請賽">
-        <span class="close-btn">&times;</span>
-        <img id="fullImage" src="merterial/ncku邀請賽.jpg" alt="完整大圖">
-    </div>
-    <div class="image-overlay" id="英檢中級">
-        <span class="close-btn">&times;</span>
-        <img id="fullImage" src="merterial/英檢中級.jpg" alt="完整大圖">
-    </div>
-    <div class="image-overlay" id="動物育望">
-        <span class="close-btn">&times;</span>
-        <img id="fullImage" src="merterial/動物育望.jpg" alt="完整大圖">
-    </div>
-    <div class="image-overlay" id="動物育望佳作">
-        <span class="close-btn">&times;</span>
-        <img id="fullImage" src="merterial/動物育望佳作.jpg" alt="完整大圖">
-    </div>
-    <div class="image-overlay" id="獎牌">
-        <span class="close-btn">&times;</span>
-        <img id="fullImage" src="merterial/獎牌.jpg" alt="完整大圖">
+    <div>
+        <div class="image-overlay" id="學科能力競賽">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/市賽資訊佳作.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="多益">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/toeic715.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="ncku邀請賽">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/ncku邀請賽.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="英檢中級">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/英檢中級.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="動物育望">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/動物育望.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="動物育望佳作">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/動物育望佳作.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="獎牌">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/獎牌.jpg" alt="完整大圖">
+        </div>
     </div>
 
     <nav>
@@ -175,7 +177,7 @@
                                 多益
                             </div>
                             <div class="image-link" onclick="toggleAchievements('ncku邀請賽')">
-                                ncku邀請賽
+                                ncku邀請賽 第42/200名
                             </div>
                             <div class="image-link" onclick="toggleAchievements('英檢中級')">
                                 英檢中級
@@ -284,14 +286,19 @@
         </div>
     </section>
 
-    <!-- <div class="giftbox-container">
-        <div class="gift-box" id="giftBox">
-            <div class="box-lid"></div>
-            <div class="box-base"></div>
-            <div class="ribbon"></div>
-            <div class="gift-text" id="giftText">感謝你的陪伴與支持！</div>
+    <div class="floor"></div>
+
+    <div class="gift-container">
+        <div class="reset-hint" id="resetHint">拖動蓋子回到禮物盒頂端以重置</div>
+        <div class="scene">
+            <div class="gift-box" id="giftBox">
+                <div class="box-lid" id="boxLid"></div>
+                <div class="box-base"></div>
+                <div class="ribbon" id="ribbon"></div>
+            </div>
+            <div class="gift-text" id="giftText">生日快樂！</div>
         </div>
-    </div> -->
+    </div>
 
 </body>
 

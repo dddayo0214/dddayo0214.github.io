@@ -1,4 +1,4 @@
-// // 滑鼠跟隨效果
+// 滑鼠跟隨效果
 const cursor = document.querySelector('.custom-cursor');
 const cursorFollower = document.querySelector('.custom-cursorFollower');
 const cursorimg = document.querySelector('.custom-cursor img');
@@ -50,6 +50,8 @@ document.addEventListener('mousemove', (e) => {
         // 開始移動
         if (!isMoving) {
             cursor.classList.add('moving');
+            cursorimg.classList.remove('rotationAnime');
+            cursorFollowerimg.classList.remove('rotationAnime');
             isMoving = true;
         }
 
@@ -57,6 +59,8 @@ document.addEventListener('mousemove', (e) => {
         clearTimeout(moveTimeout);
         moveTimeout = setTimeout(() => {
             cursor.classList.remove('moving');
+            cursorimg.classList.add('rotationAnime');
+            cursorFollowerimg.classList.add('rotationAnime');
             isMoving = false;
         }, 150); // 停止移動150ms後恢復原本動畫
     }
@@ -141,6 +145,143 @@ document.addEventListener('mouseenter', () => {
 document.addEventListener('mouseleave', () => {
     cursor.style.opacity = 0;
     cursorFollower.style.opacity = 0;
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const boxLid = document.getElementById('boxLid');
+    const giftText = document.getElementById('giftText');
+    const giftBox = document.getElementById('giftBox');
+    const ribbon = document.getElementById('ribbon');
+    const resetHint = document.getElementById('resetHint');
+    let isLidDropped = false;
+    let isDragging = false;
+    let startX, startY, initialX, initialY, lidX, lidY;
+
+    giftBox.addEventListener('click', () => {
+        if (!isLidDropped && !isDragging) {
+            ribbon.classList.add('untied');
+            setTimeout(() => {
+                boxLid.style.transform = '';
+                boxLid.classList.remove('dropped');
+                void boxLid.offsetWidth;
+                boxLid.classList.add('dropped');
+                createConfetti();
+                giftText.style.opacity = '1';
+                resetHint.classList.add('visible');
+            }, 500);
+            isLidDropped = true;
+        }
+    });
+
+    boxLid.addEventListener('mousedown', startDragging);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', stopDragging);
+
+    boxLid.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        startDragging(e.touches[0]);
+    });
+    document.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        drag(e.touches[0]);
+    });
+    document.addEventListener('touchend', stopDragging);
+
+    function startDragging() {
+        if (!isLidDropped) return;
+        isDragging = true;
+        boxLid.classList.add('dragging');
+        boxLid.classList.remove('dropped');
+
+        const rect = boxLid.getBoundingClientRect();
+        initialX = rect.left;
+        initialY = rect.top;
+        startX = mouseX - initialX;
+        startY = mouseY - initialY;
+        lidX = startX * 0.1;
+        lidY = startY * 0.1;
+
+        // 保存當前位置
+        const currentTransform = window.getComputedStyle(boxLid).transform;
+        if (currentTransform !== 'none') {
+            boxLid.style.transform = currentTransform;
+        }
+    }
+
+    function drag() {
+        if (!isDragging) return;
+
+        const x = mouseX - startX;
+        const y = mouseY - startY;
+        console.log(mouseX);
+        boxLid.style.transform = `translate(${x - initialX + 70}px, ${y - initialY + 90}px)`;
+
+        if (Math.abs(x) < 50 && Math.abs(y) < 50) {
+            resetHint.style.color = '#4CAF50';
+        } else {
+            resetHint.style.color = 'white';
+        }
+    }
+
+    function stopDragging() {
+        if (!isDragging) return;
+        isDragging = false;
+        boxLid.classList.remove('dragging');
+
+        const transform = new DOMMatrix(getComputedStyle(boxLid).transform);
+        const x = transform.m41;
+        const y = transform.m42;
+
+        if (Math.abs(x) < 50 && Math.abs(y) < 50) {
+            resetGiftBox();
+        }
+    }
+
+    function resetGiftBox() {
+        // 移除所有transform和動畫相關的樣式
+        boxLid.style.transform = '';
+        boxLid.style.animation = '';
+        boxLid.classList.remove('dropped');
+        ribbon.classList.remove('untied');
+        giftText.style.opacity = '0';
+        isLidDropped = false;
+        resetHint.classList.remove('visible');
+
+        // 強制重繪
+        void boxLid.offsetWidth;
+    }
+
+    function createConfetti() {
+        document.querySelectorAll('.confetti').forEach(el => el.remove());
+
+        const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
+
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+
+            confetti.style.left = `${Math.random() * window.innerWidth}px`;
+            confetti.style.top = `${Math.random() * window.innerHeight / 2}px`;
+
+            const size = Math.floor(Math.random() * 10) + 5;
+            confetti.style.width = `${size}px`;
+            confetti.style.height = `${size}px`;
+
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.classList.add('active-confetti');
+            }, 10);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 2000);
+        }
+    }
 });
 
 // 添加時間軸動畫
@@ -281,61 +422,3 @@ function toggleAchievements(achievement) {
 
     document.addEventListener('keydown', escHandler);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    const giftBox = document.getElementById('giftBox');
-    const giftText = document.getElementById('giftText');
-
-    // 設置可自定義的文字
-    let customMessage = '感謝你的陪伴與支持！';
-
-    // 可以在這裡更改文字內容
-    giftText.textContent = customMessage;
-
-    giftBox.addEventListener('click', () => {
-        // 開啟禮物盒
-        giftBox.classList.add('open');
-
-        // 生成彩花
-        createConfetti();
-    });
-
-    function createConfetti() {
-        // 移除舊的彩花
-        document.querySelectorAll('.confetti').forEach(el => el.remove());
-
-        // 彩花顏色
-        const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
-
-        // 創建30個彩花
-        for (let i = 0; i < 30; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-
-            // 隨機位置
-            confetti.style.left = `${Math.random() * 100}%`;
-            confetti.style.top = `${Math.random() * 100}px`;
-
-            // 隨機大小
-            const size = Math.floor(Math.random() * 10) + 5;
-            confetti.style.width = `${size}px`;
-            confetti.style.height = `${size}px`;
-
-            // 隨機形狀（方形或圓形）
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-
-            // 隨機顏色
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-            // 隨機動畫延遲
-            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-
-            document.body.appendChild(confetti);
-
-            // 加入動畫類別
-            setTimeout(() => {
-                confetti.classList.add('active-confetti');
-            }, 10);
-        }
-    }
-});
