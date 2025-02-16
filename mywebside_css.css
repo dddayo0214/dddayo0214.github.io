@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -286,7 +288,16 @@ nav {
 }
 
 .tool-card:hover .tool-icon {
-    transform: rotate(5deg);
+    transform: rotate(20deg);
+}
+
+.apex-icon {
+    width: 64px;
+    height: 64px;
+    background: url('merterial/apex-logo.png') no-repeat center/contain;
+    filter: grayscale(100%) drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s, filter 0.3s;
+    cursor: pointer;
 }
 
 .tool-title {
@@ -1198,4 +1209,14 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.counter {
+    font-family: 'Rampart One', cursive;
+    font-size: 5em;
+    margin: 100vh auto 40vh;
+}
+
+.counter:not(.is-visible) {
+    visibility: hidden;
 }
