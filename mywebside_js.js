@@ -190,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 requestAnimationFrame(dropLid);
             }, 500);
             isLidDropped = true;
+            document.getElementById('bg-music').play();
         }
     });
 
@@ -261,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = boxLidtransform.m42;
 
         if (Math.abs(x) < 50 && Math.abs(y) < 50) {
+            document.getElementById('bg-music').pause();
             resetGiftBox();
         }
     }
@@ -481,51 +483,27 @@ function toggleAchievements(achievement) {
 }
 
 // GA
-window.dataLayer = window.dataLayer || [];
-function gtag() { dataLayer.push(arguments); }
-gtag('js', new Date());
+// window.dataLayer = window.dataLayer || [];
+// function gtag() { dataLayer.push(arguments); }
+// gtag('js', new Date());
 
-gtag('config', 'G-YB0RS7N314');
+// gtag('config', 'G-YB0RS7N314');
 
-async function getVisitorCount() {
-    const response = await fetch('https://analyticsdata.googleapis.com/v1beta/properties/PROPERTY_ID:runReport', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "dateRanges": [{ "startDate": "2024-01-01", "endDate": "today" }],
-            "metrics": [{ "name": "activeUsers" }]
-        })
-    });
-    const data = await response.json();
-    document.getElementById('visitor-count').innerText = data.rows?.[0]?.metricValues?.[0]?.value || '無法取得資料';
-}
+// async function getVisitorCount() {
+//     const response = await fetch('https://analyticsdata.googleapis.com/v1beta/properties/PROPERTY_ID:runReport', {
+//         method: 'POST',
+//         headers: {
+//             'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             "dateRanges": [{ "startDate": "2024-01-01", "endDate": "today" }],
+//             "metrics": [{ "name": "activeUsers" }]
+//         })
+//     });
+//     const data = await response.json();
+//     document.getElementById('visitor-count').innerText = data.rows?.[0]?.metricValues?.[0]?.value || '無法取得資料';
+// }
 
 // 呼叫 API 以取得瀏覽人數
-getVisitorCount().catch(console.error);
-
-// Firebase 設定
-const firebaseConfig = {
-    apiKey: "AIzaSyAPuD2i6aqk77vh7A6C3Nctri2m-YQrdjA",
-    authDomain: "my-webside-97ee7.firebaseapp.com",
-    projectId: "my-webside-97ee7",
-    storageBucket: "my-webside-97ee7.firebasestorage.app",
-    messagingSenderId: "131325164583",
-    appId: "1:131325164583:web:8c1cc0c4636d72e3916202",
-    measurementId: "G-HCZ5T7EK4F"
-};
-
-// 初始化 Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const analytics = firebase.analytics();
-
-// 使用 LocalStorage 計算瀏覽次數（僅本機測試）
-let count = localStorage.getItem('page_views') || 0;
-count++;
-localStorage.setItem('page_views', count);
-document.getElementById('visitor-count').innerText = count;
-
-// 記錄自訂事件
-analytics.logEvent('page_view');
+// getVisitorCount().catch(console.error);

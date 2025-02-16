@@ -1191,3 +1191,11 @@ nav {
 .box-base:hover~.set-hint {
     color: #4CAF50;
 }
+
+.visitnumber {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
