@@ -443,6 +443,22 @@ function toggleDescription(tool) {
     });
 
     description.classList.toggle('active');
+
+    let start = null;
+    const duration = 1000; // 動畫持續時間 (毫秒)
+
+    function scaleIn(timestamp) {
+        if (!start) start = timestamp;
+        const elapsed = timestamp - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const scale = 0.95 + 0.05 * progress;
+        description.style.transform = `scale(${scale})`;
+
+        if (progress < 1) {
+            requestAnimationFrame(scaleIn);
+        }
+    }
+    requestAnimationFrame(scaleIn);
 }
 
 function toggleAchievements(achievement) {
@@ -501,6 +517,12 @@ const IO = new IntersectionObserver(callback, { threshold: 1 })
 
 const el = document.querySelector('.counter')
 IO.observe(el)
+
+window.addEventListener('load', function () {
+    setTimeout(function () {
+        window.scrollTo(0, 1);
+    }, 0);
+});
 
 // GA
 // window.dataLayer = window.dataLayer || [];
