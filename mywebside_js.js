@@ -7,6 +7,17 @@ const trails = [];
 const numTrails = 10;
 const bodytop = document.getElementById('bodytop_');
 const parentDiv = document.getElementById('bodytop');
+// 動畫的起始和結束狀態
+const startX = 0;
+const startY = 0;
+const endX = 150;
+const endY = 100;
+const startRotation = 0;
+const endRotation = 20;
+
+// 動畫持續時間（毫秒）
+const duration = 500;
+let startTime = null;
 
 // 創建拖尾效果
 for (let i = 0; i < numTrails; i++) {
@@ -150,12 +161,18 @@ document.addEventListener('mouseleave', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const boxLid = document.getElementById('boxLid');
     const giftText = document.getElementById('giftText');
-    const giftBox = document.getElementById('giftBox');
+    const giftBox = document.getElementById('boxBase');
     const ribbon = document.getElementById('ribbon');
     const resetHint = document.getElementById('resetHint');
+    const setHint = document.getElementById('setHint');
     let isLidDropped = false;
     let isDragging = false;
-    let startX, startY, initialX, initialY, lidX, lidY;
+    let initialX = 0, initialY = 0;
+    let xOffset = 0;
+    let yOffset = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let firstDrog = false;
 
     giftBox.addEventListener('click', () => {
         if (!isLidDropped && !isDragging) {
@@ -168,6 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 createConfetti();
                 giftText.style.opacity = '1';
                 resetHint.classList.add('visible');
+                setHint.classList.remove('visible');
+                resetdropLid();
+                requestAnimationFrame(dropLid);
             }, 500);
             isLidDropped = true;
         }
@@ -187,36 +207,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.addEventListener('touchend', stopDragging);
 
-    function startDragging() {
+    function startDragging(e) {
         if (!isLidDropped) return;
         isDragging = true;
         boxLid.classList.add('dragging');
         boxLid.classList.remove('dropped');
 
-        const rect = boxLid.getBoundingClientRect();
-        initialX = rect.left;
-        initialY = rect.top;
-        startX = mouseX - initialX;
-        startY = mouseY - initialY;
-        lidX = startX * 0.1;
-        lidY = startY * 0.1;
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
 
         // 保存當前位置
-        const currentTransform = window.getComputedStyle(boxLid).transform;
-        if (currentTransform !== 'none') {
-            boxLid.style.transform = currentTransform;
-        }
+        // const rect = boxLid.getBoundingClientRect();
+        // currentTransform = window.getComputedStyle(boxLid).transform;
+        // if (currentTransform !== 'none') {
+        //     boxLid.style.transform = currentTransform;
+        // }
     }
 
-    function drag() {
+    function drag(e) {
         if (!isDragging) return;
+        console.log(firstDrog);
+        if (!firstDrog) {
+            currentX = e.clientX - initialX + 150;
+            currentY = e.clientY - initialY + 100;
+        }
+        else {
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+        }
+        xOffset = currentX;
+        yOffset = currentY;
 
-        const x = mouseX - startX;
-        const y = mouseY - startY;
-        console.log(mouseX);
-        boxLid.style.transform = `translate(${x - initialX + 70}px, ${y - initialY + 90}px)`;
+        boxLid.style.transform = `translate(${currentX}px, ${currentY}px)`;
 
-        if (Math.abs(x) < 50 && Math.abs(y) < 50) {
+        if (Math.abs(currentX) < 50 && Math.abs(currentY) < 50) {
             resetHint.style.color = '#4CAF50';
         } else {
             resetHint.style.color = 'white';
@@ -226,15 +250,46 @@ document.addEventListener('DOMContentLoaded', () => {
     function stopDragging() {
         if (!isDragging) return;
         isDragging = false;
+        firstDrog = true;
         boxLid.classList.remove('dragging');
 
-        const transform = new DOMMatrix(getComputedStyle(boxLid).transform);
-        const x = transform.m41;
-        const y = transform.m42;
+        initialX = currentX;
+        initialY = currentY;
+
+        const boxLidtransform = new DOMMatrix(getComputedStyle(boxLid).transform);
+        const x = boxLidtransform.m41;
+        const y = boxLidtransform.m42;
 
         if (Math.abs(x) < 50 && Math.abs(y) < 50) {
             resetGiftBox();
         }
+    }
+
+    function dropLid(timestamp) {
+
+        if (!startTime) startTime = timestamp; // 記錄動畫開始時間
+
+        const elapsedTime = timestamp - startTime; // 計算已經過的時間
+
+        // 以進度計算當前的 X, Y 和旋轉角度
+        const progress = Math.min(elapsedTime / duration, 1); // 進度值在 0 到 1 之間
+
+        const currentX = startX + (endX - startX) * progress;
+        const currentY = startY + (endY - startY) * progress;
+        const currentRotation = startRotation + (endRotation - startRotation) * progress;
+
+        // 設置 transform 屬性
+        boxLid.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${currentRotation}deg)`;
+
+        // 如果動畫還沒完成，繼續請求下一幀
+        if (elapsedTime < duration) {
+            requestAnimationFrame(dropLid); // 繼續動畫
+        }
+    }
+
+    function resetdropLid() {
+        firstDrog = false;
+        startTime = null;
     }
 
     function resetGiftBox() {
@@ -246,9 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
         giftText.style.opacity = '0';
         isLidDropped = false;
         resetHint.classList.remove('visible');
+        setHint.classList.add('visible');
 
         // 強制重繪
         void boxLid.offsetWidth;
+        // location.reload();
     }
 
     function createConfetti() {
@@ -422,3 +479,9 @@ function toggleAchievements(achievement) {
 
     document.addEventListener('keydown', escHandler);
 }
+
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('js', new Date());
+
+gtag('config', 'G-YB0RS7N314');
