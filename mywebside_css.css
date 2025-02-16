@@ -166,7 +166,7 @@ nav {
     text-align: center;
     position: relative;
     overflow: hidden;
-    top: auto;
+    top: 5vw;
 }
 
 .hero-content {
@@ -174,12 +174,6 @@ nav {
     transform: translateY(20px);
     animation: fadeInUp 1s forwards;
 }
-
-/* @media (max-width: 768px) {
-    .hero {
-        top: auto;
-    }
-} */
 
 .hero h1 {
     font-size: 3.5rem;
