@@ -47,10 +47,6 @@
             <span class="close-btn">&times;</span>
             <img id="fullImage" src="merterial/動物育望.jpg" alt="完整大圖">
         </div>
-        <div class="image-overlay" id="動物育望佳作">
-            <span class="close-btn">&times;</span>
-            <img id="fullImage" src="merterial/動物育望佳作.jpg" alt="完整大圖">
-        </div>
         <div class="image-overlay" id="獎牌">
             <span class="close-btn">&times;</span>
             <img id="fullImage" src="merterial/獎牌.jpg" alt="完整大圖">
@@ -166,7 +162,7 @@
                 <br>
                 <p class="profile">生日: 2/14</p>
                 <p class="profile">星座: 水瓶</p>
-                <p class="profile">生肖: 豬狗不如</p>
+                <p class="profile">生肖: 我也不知道</p>
                 <div class="skills">
                     <h3>學習技能</h3>
                     <div class="skill-tags">
@@ -230,9 +226,6 @@
                     <div class="timeline-achievements">成果
                         <div class="image-container">
                             <div class="image-link" onclick="toggleAchievements('動物育望')">
-                                動物育望
-                            </div>
-                            <div class="image-link" onclick="toggleAchievements('動物育望佳作')">
                                 動物育望佳作
                             </div>
                         </div>
@@ -342,13 +335,15 @@
 </body>
 
 <script type="module">
+    // 引入 Firebase SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+    import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
     // Firebase 設定
     const firebaseConfig = {
         apiKey: "AIzaSyAPuD2i6aqk77vh7A6C3Nctri2m-YQrdjA",
         authDomain: "my-webside-97ee7.firebaseapp.com",
+        databaseURL: "https://my-webside-97ee7-default-rtdb.firebaseio.com",
         projectId: "my-webside-97ee7",
         storageBucket: "my-webside-97ee7.firebasestorage.app",
         messagingSenderId: "131325164583",
@@ -358,14 +353,23 @@
 
     // 初始化 Firebase
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    logEvent(analytics, 'page_view');
+    const db = getDatabase(app);
 
-    // 使用 LocalStorage 計算瀏覽次數（僅本機測試）
-    let count = localStorage.getItem('page_views') || 0;
-    count++;
-    localStorage.setItem('page_views', count);
-    document.getElementById('visitor-count').innerText = count;
+    // 計算瀏覽次數
+    const counterRef = ref(db, 'page_views');
+    runTransaction(counterRef, (current) => {
+        return (current || 0) + 1;
+    }).then(({ snapshot }) => {
+        document.querySelector('.counter').innerText = snapshot.val();
+    }).catch((error) => {
+        console.error("更新計數失敗:", error);
+    });
+
+    // 使用 LocalStorage 計算瀏覽次數
+    // let count = localStorage.getItem('page_views') || 0;
+    // count++;
+    // localStorage.setItem('page_views', count);
+    // document.getElementById('visitor-count').innerText = count;
 </script>
 
 </html>
