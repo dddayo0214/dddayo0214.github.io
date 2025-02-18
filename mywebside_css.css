@@ -51,6 +51,26 @@ body {
 }
 
 /* 導航欄區塊 */
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+.nav-now {
+    position: absolute;
+    top: 0;
+    padding: 2rem;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 3px;
+}
+
 .nav-indicator {
     position: absolute;
     bottom: 0;
@@ -58,14 +78,6 @@ body {
     background: #60a5fa;
     transition: all 0.3s ease;
     border-radius: 3px;
-}
-
-.nav-links {
-    position: relative;
-}
-
-.nav-links a {
-    padding: 0.5rem 1rem;
 }
 
 /* 滾動進度條 */
@@ -96,16 +108,6 @@ body {
     }
 }
 
-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(15, 23, 42, 0.9);
-    padding: 1rem;
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-}
-
 .nav-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -132,6 +134,7 @@ nav {
 }
 
 .nav-links {
+    position: relative;
     display: flex;
     gap: 2rem;
 }
@@ -141,6 +144,7 @@ nav {
     text-decoration: none;
     transition: color 0.3s;
     position: relative;
+    padding: 0.5rem 1rem;
 }
 
 .nav-links a::after {
