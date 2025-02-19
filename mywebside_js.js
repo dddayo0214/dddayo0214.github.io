@@ -61,8 +61,6 @@ document.addEventListener('mousemove', (e) => {
         // 開始移動
         if (!isMoving) {
             cursor.classList.add('moving');
-            cursorimg.classList.remove('rotationAnime');
-            cursorFollowerimg.classList.remove('rotationAnime');
             isMoving = true;
         }
 
@@ -70,8 +68,6 @@ document.addEventListener('mousemove', (e) => {
         clearTimeout(moveTimeout);
         moveTimeout = setTimeout(() => {
             cursor.classList.remove('moving');
-            cursorimg.classList.add('rotationAnime');
-            cursorFollowerimg.classList.add('rotationAnime');
             isMoving = false;
         }, 150); // 停止移動150ms後恢復原本動畫
     }
@@ -362,6 +358,7 @@ timelineItems.forEach(item => {
 
 // 導航欄動畫
 const navLinks = document.querySelectorAll('.nav-links a');
+const navLinksAside = document.querySelectorAll('.nav-aside a');
 const indicator = document.querySelector('.nav-indicator');
 const scrollProgress = document.querySelector('.scroll-progress');
 
@@ -395,6 +392,23 @@ navLinks.forEach(link => {
 
         // 更新活動狀態和移動指示器
         navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        moveIndicator(link);
+    });
+});
+
+navLinksAside.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+
+        targetSection.scrollIntoView({
+            behavior: 'smooth'
+        });
+
+        // 更新活動狀態和移動指示器
+        navLinksAside.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
         moveIndicator(link);
     });
@@ -522,6 +536,126 @@ window.addEventListener('load', function () {
     setTimeout(function () {
         window.scrollTo(0, 1);
     }, 0);
+});
+
+// 數學公式動畫
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let sigma = 10, rho = 28, beta = 2.67;
+const attractors = [];
+const maxAttractors = 20;
+const scale = 10;
+let time = 0;
+
+document.querySelectorAll("input").forEach(input => input.addEventListener("input", () => {
+    sigma = parseFloat(document.getElementById("sigma").value);
+    rho = parseFloat(document.getElementById("rho").value);
+    beta = parseFloat(document.getElementById("beta").value);
+}));
+
+function resetValues() {
+    sigma = 10;
+    rho = 28;
+    beta = 2.67;
+    document.getElementById('sigma').value = '10';
+    document.getElementById('rho').value = '28';
+    document.getElementById('bets').value = '2.67';
+}
+
+function closeEffect() {
+    canvas.width = 0;
+    canvas.height = 0;
+}
+
+function startEffect() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+const createAttractor = (x, y) => ({
+    x: Math.random() * 10,
+    y: Math.random() * 10,
+    z: Math.random() * 10,
+    trail: [],
+    posX: x,
+    posY: y
+});
+
+const update = (attractor) => {
+    const dt = 0.01;
+    attractor.x += sigma * (attractor.y - attractor.x) * dt;
+    attractor.y += (attractor.x * (rho - attractor.z) - attractor.y) * dt;
+    attractor.z += (attractor.x * attractor.y - beta * attractor.z) * dt;
+    attractor.trail.push({ x: attractor.x, y: attractor.y, z: attractor.z, time: performance.now() });
+    if (attractor.trail.length > 300) attractor.trail.shift();
+};
+
+const draw = () => {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 1.5;
+
+    attractors.forEach(attractor => {
+        ctx.beginPath();
+        attractor.trail.forEach((p, i) => {
+            const px = attractor.posX + p.x * scale;
+            const py = attractor.posY - p.z * scale;
+            const hue = (p.time / 10) % 360;
+            ctx.strokeStyle = `hsl(${hue}, 100%, 70%)`;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+    });
+
+    // 波浪效果
+    for (let i = 0; i < canvas.width; i += 20) {
+        let y = Math.sin((i + time) * 0.01) * 20 + canvas.height / 2;
+        ctx.fillStyle = `rgba(0, ${255 - (i / 10)}, ${255 - (i / 10)}, 0.3)`;
+        ctx.fillRect(i, y, 5, 5);
+    }
+
+    // 流體粒子效果
+    // for (let i = 0; i < 50; i++) {
+    //     let x = Math.random() * canvas.width;
+    //     let y = Math.random() * canvas.height;
+    //     ctx.fillStyle = "rgba(255, 255, 0, 0.2)";
+    //     ctx.beginPath();
+    //     ctx.arc(x, y, 3, 0, Math.PI * 2);
+    //     ctx.fill();
+    // }
+
+    // 圓形波浪效果
+    for (let i = 0; i < 10; i++) {
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        ctx.strokeStyle = "rgba(0, 9, 133, 0.6)";
+        ctx.beginPath();
+        // ctx.arc(canvas.width / 2, canvas.height / 2, (time % 100) * i, 0, Math.PI * 2);
+        ctx.arc(x, y, (time % 100) * i, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+};
+
+const animate = () => {
+    time += 1;
+    attractors.forEach(update);
+    draw();
+    requestAnimationFrame(animate);
+};
+animate();
+
+window.addEventListener("mousemove", (event) => {
+    attractors.push(createAttractor(event.clientX, event.clientY));
+    if (attractors.length > maxAttractors) attractors.shift();
+});
+
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 });
 
 // GA

@@ -18,13 +18,42 @@
 
 <body>
     <div class="custom-cursor" id="bodytop">
-        <img src="merterial/rocket.png" alt="custom cursor" id="bodytop_">
+        <img class="rotationAnime" src="merterial/rocket.png" alt="custom cursor" id="bodytop_">
     </div>
     <div class="custom-cursorFollower">
         <img class="rotationAnime" src="merterial/comet.png" alt="custom cursorFollower">
     </div>
-    <div class="background-animation"></div>
     <div class="scroll-progress"></div>
+
+    <input type="checkbox" name="" id="sideMenu-active">
+
+    <div class="sideMenu">
+        <div class="nav-aside">
+            <div class="nav-aside-links">
+                <a href="#home" class="active">首頁</a>
+                <a href="#about">關於</a>
+                <a href="#timeline">歷程</a>
+                <a href="#projects">作品</a>
+                <a href="#contact">聯絡</a>
+            </div>
+            <div class="input-group" id="controls">
+                <a>輸入數值改變背景動畫</a>
+                <label>σ: <input type="number" id="sigma" value="10" step="0.1"></label>
+                <label>ρ: <input type="number" id="rho" value="28" step="0.1"></label>
+                <label>β: <input type="number" id="beta" value="2.67" step="0.01"></label>
+                <div class="aside-btn">
+                    <button class="btn" id="math-reset" onclick="resetValues()">Reset</button>
+                    <button class="btn" id="effect-close" onclick="closeEffect()">StopEffects</button>
+                    <button class="btn" id="effect-start" onclick="startEffect()">StartEffects</button>
+                </div>
+            </div>
+        </div>
+        <label class="nav-aside-label" for="sideMenu-active">
+            <i class="fas fa-angle-right"></i>
+        </label>
+    </div>
+
+    <canvas id="canvas"></canvas>
 
     <div>
         <div class="image-overlay" id="學科能力競賽">
@@ -64,7 +93,7 @@
         <div class="nav-content" id="nav-content">
             <div class="nav-wight">
                 <div class="nav-logo">
-                    <!-- <img src="merterial/hinano.png" alt="logo"> -->
+                    <img src="merterial/hinano.png" alt="logo">
                 </div>
                 <div class="logo">Tsai alan的歡樂小屋</div>
             </div>
@@ -202,7 +231,7 @@
             <div class="timeline-item">
                 <div class="timeline-content">
                     <div class="timeline-date">
-                        <i class="fas fa-calendar-alt"></i> 2021 - now
+                        <i class="fas fa-calendar-alt"></i> 2022 - now
                     </div>
                     <div class="timeline-title">高中生涯</div>
                     <p>開始學習程式設計。</p>
@@ -228,7 +257,7 @@
             <div class="timeline-item">
                 <div class="timeline-content">
                     <div class="timeline-date">
-                        <i class="fas fa-calendar-alt"></i> 2018 - 2021
+                        <i class="fas fa-calendar-alt"></i> 2019 - 2022
                     </div>
                     <div class="timeline-title">國中生涯</div>
                     <p>美術班中的普通生。</p>
@@ -245,7 +274,7 @@
             <div class="timeline-item">
                 <div class="timeline-content">
                     <div class="timeline-date">
-                        <i class="fas fa-calendar-alt"></i> 2018
+                        <i class="fas fa-calendar-alt"></i> 2013-2019
                     </div>
                     <div class="timeline-title">國小生涯</div>
                     <p>天真無邪愛玩的桌球隊隊員。</p>
@@ -262,7 +291,7 @@
             <div class="timeline-item">
                 <div class="timeline-content">
                     <div class="timeline-date">
-                        <i class="fas fa-calendar-alt"></i> 2018
+                        <i class="fas fa-calendar-alt"></i> 出生-2013
                     </div>
                     <div class="timeline-title">歡樂時期</div>
                     <p>hehe :D。</p>
@@ -326,7 +355,7 @@
         <p>本站目前瀏覽次數：<span class="counter" id="visitor-count">載入中...</span></p>
     </section>
 
-    <div class="bottom">Copyright &copy Tsai alan</div>
+    <div class="footer">Copyright &copy Tsai alan</div>
 
     <div class="floor"></div>
     <div class="gift-container">
