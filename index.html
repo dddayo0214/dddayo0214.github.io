@@ -25,34 +25,6 @@
     </div>
     <div class="scroll-progress"></div>
 
-    <input type="checkbox" name="" id="sideMenu-active">
-
-    <div class="sideMenu">
-        <div class="nav-aside">
-            <div class="nav-aside-links">
-                <a href="#home" class="active">首頁</a>
-                <a href="#about">關於</a>
-                <a href="#timeline">歷程</a>
-                <a href="#projects">作品</a>
-                <a href="#contact">聯絡</a>
-            </div>
-            <div class="input-group" id="controls">
-                <a>輸入數值改變背景動畫</a>
-                <label>σ: <input type="number" id="sigma" value="10" step="0.1"></label>
-                <label>ρ: <input type="number" id="rho" value="28" step="0.1"></label>
-                <label>β: <input type="number" id="beta" value="2.67" step="0.01"></label>
-                <div class="aside-btn">
-                    <button class="btn" id="math-reset" onclick="resetValues()">Reset</button>
-                    <button class="btn" id="effect-close" onclick="closeEffect()">StopEffects</button>
-                    <button class="btn" id="effect-start" onclick="startEffect()">StartEffects</button>
-                </div>
-            </div>
-        </div>
-        <label class="nav-aside-label" for="sideMenu-active">
-            <i class="fas fa-angle-right"></i>
-        </label>
-    </div>
-
     <canvas id="canvas"></canvas>
 
     <div>
@@ -87,13 +59,39 @@
         您的瀏覽器不支援音訊元素。
     </audio>
 
+    <input type="checkbox" name="" id="sideMenu-active">
+
+    <div class="sideMenu">
+        <div class="nav-aside">
+            <a href="#home" class="active btn">首頁</a>
+            <a href="#about" class="btn">關於</a>
+            <a href="#timeline" class="btn">歷程</a>
+            <a href="#projects" class="btn">作品</a>
+            <a href="#contact" class="btn">聯絡</a>
+            <button class="btn" onclick="editAnimation()">改變背景動畫</button>
+            <ul>
+                <div class="input-group not-visible" id="math-input">
+                    <label>σ: <input type="number" id="sigma" value="10" step="0.1"></label>
+                    <label>ρ: <input type="number" id="rho" value="28" step="0.1"></label>
+                    <label>β: <input type="number" id="beta" value="2.67" step="0.01"></label>
+                    <button class="btn" id="math-reset" onclick="resetValues()">ResetValues</button>
+                    <button class="btn" id="effect-close" onclick="closeEffect()">StopEffects</button>
+                    <button class="btn" id="effect-start" onclick="startEffect()">StartEffects</button>
+                </div>
+            </ul>
+        </div>
+        <label class="nav-aside-label" for="sideMenu-active">
+            <i class="fas fa-angle-right"></i>
+        </label>
+    </div>
+
     <div class="nav-now" id="nav-now"></div>
 
     <nav>
         <div class="nav-content" id="nav-content">
             <div class="nav-wight">
                 <div class="nav-logo">
-                    <img src="merterial/hinano.png" alt="logo">
+                    <!-- <img src="merterial/hinano.png" alt="logo"> -->
                 </div>
                 <div class="logo">Tsai alan的歡樂小屋</div>
             </div>
@@ -357,18 +355,20 @@
 
     <div class="footer">Copyright &copy Tsai alan</div>
 
-    <div class="floor"></div>
-    <div class="gift-container">
-        <div>
-            <div class="box-lid" id="boxLid">
-                <div class="ribbon" id="ribbon"></div>
+    <section class="gift-section">
+        <div class="floor"></div>
+        <div class="gift-container">
+            <div>
+                <div class="box-lid" id="boxLid">
+                    <div class="ribbon" id="ribbon"></div>
+                </div>
+                <div class="box-base" id="boxBase"></div>
+                <div class="set-hint visible" id="setHint">點擊禮物獲得驚喜</div>
+                <div class="reset-hint" id="resetHint">拖動蓋子回到禮物盒頂端以重置</div>
+                <div class="gift-text" id="giftText">生日快樂！</div>
             </div>
-            <div class="box-base" id="boxBase"></div>
-            <div class="set-hint visible" id="setHint">點擊禮物獲得驚喜</div>
-            <div class="reset-hint" id="resetHint">拖動蓋子回到禮物盒頂端以重置</div>
-            <div class="gift-text" id="giftText">生日快樂！</div>
         </div>
-    </div>
+    </section>
 
 </body>
 

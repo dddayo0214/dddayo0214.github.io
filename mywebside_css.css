@@ -15,167 +15,7 @@ body {
     /* cursor: none; */
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* 導航欄區塊 */
-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(15, 23, 42, 0.9);
-    padding: 1rem;
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-}
-
-.nav-now {
-    position: absolute;
-    top: 0;
-    padding: 2rem;
-    width: 100%;
-    background: rgba(15, 23, 42, 0.9);
-    border-radius: 3px;
-}
-
-.nav-indicator {
-    position: absolute;
-    bottom: 0;
-    height: 3px;
-    background: #60a5fa;
-    transition: all 0.3s ease;
-    border-radius: 3px;
-}
-
-/* 滾動進度條 */
-.scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 3px;
-    background: linear-gradient(to right, #60a5fa, #93c5fd);
-    z-index: 1001;
-    transition: width 0.1s;
-}
-
-.nav-links a.active {
-    color: #60a5fa;
-}
-
-.sideMenu {
-    top: 5rem;
-    width: 300px;
-    height: 100%;
-    background-color: #143686;
-    border-right: 3px solid #d1d1d1;
-    display: flex;
-    flex-direction: column;
-    padding: 50px 0;
-    box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
-    position: fixed;
-    transform: translateX(-100%);
-    transition: 0.5s;
-    z-index: 10000;
-
-    .nav-aside-label {
-        cursor: pointer;
-        width: 20px;
-        height: 80px;
-        background-color: #d1d1d1;
-        color: #686666;
-        position: absolute;
-        right: -20px;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        line-height: 80px;
-        text-align: center;
-        border-radius: 0 5px 5px 0;
-        box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
-    }
-}
-
-#sideMenu-active:checked+.sideMenu {
-    transform: translateX(0);
-
-    label .fas {
-        transform: scaleX(-1);
-    }
-}
-
-#sideMenu-active {
-    position: fixed;
-    opacity: 0;
-    z-index: -1;
-    cursor: pointer;
-}
-
-.nav-aside-links {
-    cursor: pointer;
-
-    a {
-        display: block;
-        color: #fff;
-        padding: 20px 10px;
-        position: relative;
-
-        .fas {
-            margin-right: -1.1em;
-            transform: scale(0);
-            transition: 0.3s;
-        }
-
-        &:hover .fas {
-            margin-right: 0em;
-            transform: scale(1);
-        }
-
-        &+a::before {
-            content: "";
-            position: absolute;
-            border-top: 1px dashed #ffffff;
-            left: 10px;
-            right: 10px;
-            top: 0px;
-        }
-    }
-}
-
 /* 數學公式動畫 */
-#controls {
-    position: fixed;
-    background: rgba(61, 0, 166, 0.595);
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 10;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 8px;
-    margin: 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
 canvas {
     position: fixed;
     top: 0;
@@ -186,72 +26,6 @@ canvas {
     z-index: -1;
 }
 
-/* 手機 */
-@media (max-width: 768px) {
-    .nav-indicator {
-        display: none;
-    }
-
-    .nav-links a.active {
-        background: rgba(96, 165, 250, 0.1);
-        border-radius: 0.5rem;
-    }
-}
-
-.nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-wight {
-    margin: 10 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-logo img {
-    width: 130px;
-    height: 50px;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.nav-links {
-    position: relative;
-    display: flex;
-    gap: 2rem;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-    position: relative;
-    padding: 0.5rem 1rem;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: #60a5fa;
-    transition: width 0.3s;
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
 .btn,
 .btn:focus {
     cursor: pointer;
@@ -259,7 +33,7 @@ canvas {
     margin: 20px;
     position: relative;
     min-width: 200px;
-    background-color: rgb(26, 0, 142);
+    background-color: rgb(0, 160, 184);
     border-radius: 4em;
     color: white;
     font-size: 1rem;
@@ -317,12 +91,191 @@ canvas {
     height: 450%;
 }
 
-@media (max-width: 768px) {
-    .btn {
-        visibility: hidden;
-        opacity: 0;
-        font-size: 0.8rem;
+/* 導航欄區塊 */
+nav {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+.nav-now {
+    position: absolute;
+    top: 0;
+    padding: 2rem;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 3px;
+    z-index: 1000;
+}
+
+.nav-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    background: #60a5fa;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+.sideMenu {
+    top: 5rem;
+    width: 300px;
+    height: 100%;
+    background-color: #143686;
+    border-right: 3px solid #d1d1d1;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 0;
+    box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
+    position: fixed;
+    transform: translateX(-100%);
+    transition: 0.5s;
+    z-index: 10000;
+
+    .nav-aside-label {
+        cursor: pointer;
+        width: 20px;
+        height: 80px;
+        background-color: #d1d1d1;
+        color: #686666;
+        position: absolute;
+        right: -20px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        line-height: 80px;
+        text-align: center;
+        border-radius: 0 5px 5px 0;
+        box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
     }
+}
+
+#sideMenu-active:checked+.sideMenu {
+    transform: translateX(0);
+
+    label .fas {
+        transform: scaleX(-1);
+    }
+}
+
+#sideMenu-active {
+    position: fixed;
+    opacity: 0;
+    z-index: -1;
+    cursor: pointer;
+}
+
+.nav-aside {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-aside-header {
+    overflow: scroll;
+}
+
+.input-group {
+    background: rgba(61, 0, 166, 0.595);
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    left: 100%;
+    top: 0;
+    position: absolute;
+    display: block;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group.not-visible {
+    display: none;
+}
+
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-wight {
+    margin: 10 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo img {
+    width: 130px;
+    height: 50px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    position: relative;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+    padding: 0.5rem 1rem;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #60a5fa;
+    transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* 滾動進度條 */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(to right, #60a5fa, #93c5fd);
+    z-index: 1001;
+    transition: width 0.1s;
+}
+
+.nav-links a.active {
+    color: #60a5fa;
 }
 
 /* 首頁區塊 */
@@ -743,34 +696,6 @@ canvas {
     font-weight: bold;
 }
 
-@keyframes slideIn {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .timeline-container::after {
-        left: 31px;
-    }
-
-    .timeline-item {
-        width: 100%;
-        padding-left: 70px;
-        padding-right: 25px;
-    }
-
-    .timeline-item:nth-child(even) {
-        left: 0;
-    }
-
-    .timeline-content::after {
-        left: -67px;
-        right: auto;
-    }
-}
-
 /* 聯絡區塊 */
 .contact {
     padding: 15rem 2rem;
@@ -812,21 +737,7 @@ canvas {
     font-size: 1.5rem;
 }
 
-@keyframes fadeInRight {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* 自訂游標樣式 */
+/* 游標樣式 */
 .custom-cursor {
     width: 50px;
     height: 50px;
@@ -879,33 +790,6 @@ canvas {
     transform: translate(-50%, -50%) scale(1.2);
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.5;
-    }
-
-    50% {
-        transform: scale(1.5);
-        opacity: 0.2;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 0.5;
-    }
-}
-
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .trail {
     position: fixed;
     width: 10px;
@@ -916,21 +800,6 @@ canvas {
     pointer-events: none;
     transform-origin: 20px 20px;
     transition: transform 0.1s ease;
-}
-
-/* 在手機裝置上隱藏自訂游標 */
-@media (max-width: 768px) {
-    * {
-        cursor: auto;
-    }
-
-    .custom-cursor {
-        display: none;
-    }
-
-    .custom-cursorFollower {
-        display: none;
-    }
 }
 
 .copy-right {
@@ -953,32 +822,6 @@ canvas {
 .copy-right a {
     font-size: 3.5rem;
     margin-bottom: 1rem;
-}
-
-/* 響應式設計 */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero p {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .about-content {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-links {
-        flex-direction: column;
-        align-items: center;
-    }
 }
 
 /* 成果圖片 */
@@ -1125,18 +968,6 @@ canvas {
     animation: fall 1.5s ease-out forwards;
 }
 
-@keyframes fall {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(1000px) rotate(360deg);
-        opacity: 0;
-    }
-}
-
 .floor {
     position: fixed;
     bottom: 0;
@@ -1261,6 +1092,68 @@ canvas {
     visibility: hidden;
 }
 
+/* 動畫 */
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(1000px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeInRight {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 響應式設計 */
 @media (max-width: 768px) {
     .visitnumber h1 {
         font-size: 5em;
@@ -1268,5 +1161,66 @@ canvas {
 
     .counter {
         font-size: 2.5em;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+
+    .custom-cursor {
+        display: none;
+    }
+
+    .custom-cursorFollower {
+        display: none;
+    }
+
+    .timeline-container::after {
+        left: 31px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+    }
+
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+
+    .timeline-content::after {
+        left: -67px;
+        right: auto;
+    }
+
+    .nav-indicator {
+        display: none;
+    }
+
+    .nav-links a.active {
+        background: rgba(96, 165, 250, 0.1);
+        border-radius: 0.5rem;
+    }
+
+    .nav-aside ul {
+        display: none;
     }
 }

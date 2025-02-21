@@ -15,9 +15,21 @@ const endY = 100;
 const startRotation = 0;
 const endRotation = 20;
 
-// 動畫持續時間（毫秒）
+// 動畫持續時間
 const duration = 500;
 let startTime = null;
+
+let mobile = null;
+
+function checkScreen() {
+    if (window.innerWidth < 768) {
+        mobile = true;
+    } else {
+        mobile = false;
+    }
+}
+
+checkScreen();
 
 // 創建拖尾效果
 for (let i = 0; i < numTrails; i++) {
@@ -73,7 +85,6 @@ document.addEventListener('mousemove', (e) => {
     }
 });
 
-// 使用 requestAnimationFrame 實現更平滑的移動
 function updateCursor() {
     const dx = mouseX - cursorX;
     const dy = mouseY - cursorY;
@@ -136,10 +147,9 @@ links.forEach(link => {
 
 // 點擊效果
 document.addEventListener('click', () => {
-    const icon = document.querySelector('.custom-cursorFollower img');
-    icon.style.transform = 'scale(1.5)';
+    cursorFollowerimg.style.transform = 'scale(100)';
     setTimeout(() => {
-        icon.style.transform = 'scale(1)';
+        cursorFollowerimg.style.transform = 'scale(1)';
     }, 200);
 });
 
@@ -370,6 +380,16 @@ function initIndicator() {
     }
 }
 
+const mathInput = document.getElementById('math-input');
+
+function editAnimation() {
+    if (mathInput.classList.contains('not-visible')) {
+        mathInput.classList.remove('not-visible');
+    } else {
+        mathInput.classList.add('not-visible');
+    }
+}
+
 // 移動導航指示器
 function moveIndicator(element) {
     const rect = element.getBoundingClientRect();
@@ -562,7 +582,7 @@ function resetValues() {
     beta = 2.67;
     document.getElementById('sigma').value = '10';
     document.getElementById('rho').value = '28';
-    document.getElementById('bets').value = '2.67';
+    document.getElementById('beta').value = '2.67';
 }
 
 function closeEffect() {
@@ -598,18 +618,21 @@ const draw = () => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 1.5;
 
-    attractors.forEach(attractor => {
-        ctx.beginPath();
-        attractor.trail.forEach((p, i) => {
-            const px = attractor.posX + p.x * scale;
-            const py = attractor.posY - p.z * scale;
-            const hue = (p.time / 10) % 360;
-            ctx.strokeStyle = `hsl(${hue}, 100%, 70%)`;
-            if (i === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
+    // 洛倫茲吸子效果
+    if (!mobile) {
+        attractors.forEach(attractor => {
+            ctx.beginPath();
+            attractor.trail.forEach((p, i) => {
+                const px = attractor.posX + p.x * scale;
+                const py = attractor.posY - p.z * scale;
+                const hue = (p.time / 10) % 360;
+                ctx.strokeStyle = `hsl(${hue}, 100%, 70%)`;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
         });
-        ctx.stroke();
-    });
+    }
 
     // 波浪效果
     for (let i = 0; i < canvas.width; i += 20) {
