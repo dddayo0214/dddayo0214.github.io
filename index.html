@@ -538,6 +538,13 @@
         snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
                 const doc = change.doc;
+                createNote(
+                    doc.data().text,
+                    doc.data().timestamp,
+                    doc.id,
+                    doc.data().userId,
+                    doc.data().displayName || "匿名用戶"
+                );
             } else if (change.type === "removed") {
                 const note = document.querySelector(`[data-id="${change.doc.id}"]`);
                 if (note) {
