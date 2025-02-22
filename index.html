@@ -475,15 +475,15 @@
         note.appendChild(timeLabel);
 
         // ✅ 只有留言作者才能刪除
-        if (user && user.uid === userId) {
-            const deleteBtn = document.createElement("button");
-            deleteBtn.innerText = "刪除";
-            deleteBtn.style.backgroundColor = "red";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.padding = "5px";
-            deleteBtn.style.cursor = "pointer";
 
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "刪除";
+        deleteBtn.style.backgroundColor = "red";
+        deleteBtn.style.color = "white";
+        deleteBtn.style.border = "none";
+        deleteBtn.style.padding = "5px";
+        deleteBtn.style.cursor = "pointer";
+        if (user && user.uid === userId) {
             deleteBtn.addEventListener("click", () => {
                 if (confirm("確定要刪除這則留言嗎？")) {
                     db.collection("notes").doc(noteId).delete().then(() => {
@@ -494,6 +494,9 @@
                 }
             });
             note.appendChild(deleteBtn);
+        }
+        else {
+            alert("只有留言作者才能刪除");
         }
         noteContainer.appendChild(note);
     }
