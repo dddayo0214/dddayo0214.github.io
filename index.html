@@ -434,6 +434,7 @@
     const inputArea = document.getElementById("input-area");
     const noteContainer = document.getElementById("note-container");
     const noteInput = document.getElementById("note-input");
+    let userTimes;
 
     auth.onAuthStateChanged(user => { updateUI(user); });
 
@@ -515,6 +516,16 @@
                     displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
                 });
                 noteInput.value = "";
+
+                // 🔥 限制便條紙數量（例如：最多 5 張）
+                const userNotes = db.collection("notes")
+                    .where("userId", "==", user.uid)
+                    .get();
+
+                if (userNotes.size >= 5) {
+                    alert("你已經達到 5 則便條紙的上限，請先刪除舊的再新增！");
+                    return;
+                }
 
                 // 限制字數
                 if (text.length > 200) {

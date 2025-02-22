@@ -1,177 +1,134 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>便條紙留言板</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
+    <title>科技感 Input 範例</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            background: #f0f0f0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #auth-container {
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 10px;
-            margin: 5px;
-            cursor: pointer;
-        }
-
-        #note-container {
-            width: 80vw;
-            height: 60vh;
-            background: #fff;
-            border: 2px solid #ddd;
-            overflow: auto;
-            display: flex;
-            flex-wrap: wrap;
-            padding: 10px;
-            position: relative;
-        }
-
-        .note {
-            width: 180px;
-            min-height: 100px;
-            background: #fffa8c;
-            padding: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            font-size: 14px;
             font-family: Arial, sans-serif;
-            border-radius: 5px;
-            user-select: none;
+            background-color: #121212;
             display: flex;
-            flex-direction: column;
-            margin: 5px;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .input-container {
+            position: relative;
+            width: 300px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #2a2a2a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
             position: relative;
         }
 
-        .timestamp {
-            font-size: 10px;
-            color: gray;
-            text-align: right;
-            margin-top: 5px;
+        input[type="text"]:focus {
+            border-color: #00ff99;
+            box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
         }
 
-        #input-area {
-            width: 80vw;
-            margin-bottom: 10px;
-            display: none;
+        .input-container label {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 16px;
+            color: #aaa;
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
 
-        textarea {
-            width: 100%;
-            height: 60px;
-            padding: 5px;
-            font-size: 14px;
-            resize: none;
+        input[type="text"]:focus+.input-container label,
+        input[type="text"]:valid+.input-container label {
+            top: -10px;
+            left: 20px;
+            font-size: 12px;
+            color: #00ff99;
+        }
+
+        /* 隱藏預設文字 */
+        input[type="text"]::placeholder {
+            color: transparent;
+            visibility: hidden;
+        }
+
+        /* 粒子特效 */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #00ff99;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: particle-animation 1s infinite ease-in-out;
+        }
+
+        @keyframes particle-animation {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="auth-container">
-        <button id="login-btn">使用 Google 登入</button>
-        <button id="logout-btn" style="display: none;">登出</button>
+
+    <div class="input-container">
+        <input type="text" id="techInput" placeholder="請輸入資料" oninput="createParticles(event)" required>
+        <label for="techInput">輸入資料</label>
     </div>
-    <div id="input-area">
-        <textarea id="note-input" placeholder="輸入留言後按 Enter"></textarea>
-    </div>
-    <div id="note-container"></div>
+
+    <div class="particles" id="particles"></div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "你的API_KEY",
-            authDomain: "你的AUTH_DOMAIN",
-            projectId: "你的PROJECT_ID",
-            storageBucket: "你的STORAGE_BUCKET",
-            messagingSenderId: "你的MESSAGING_SENDER_ID",
-            appId: "你的APP_ID"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        function createParticles(event) {
+            const inputElement = event.target;
+            const particlesContainer = document.getElementById('particles');
+            const rect = inputElement.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
 
-        const loginBtn = document.getElementById("login-btn");
-        const logoutBtn = document.getElementById("logout-btn");
-        const inputArea = document.getElementById("input-area");
-        const noteContainer = document.getElementById("note-container");
-        const noteInput = document.getElementById("note-input");
+            // Create new particle
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
 
-        function updateUI(user) {
-            if (user) {
-                loginBtn.style.display = "none";
-                logoutBtn.style.display = "block";
-                inputArea.style.display = "block";
-            } else {
-                loginBtn.style.display = "block";
-                logoutBtn.style.display = "none";
-                inputArea.style.display = "none";
-            }
+            particlesContainer.appendChild(particle);
+
+            // Remove particle after animation ends
+            setTimeout(() => {
+                particle.remove();
+            }, 1000);
         }
-
-        auth.onAuthStateChanged(user => { updateUI(user); });
-
-        loginBtn.addEventListener("click", () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider);
-        });
-
-        logoutBtn.addEventListener("click", () => { auth.signOut(); });
-
-        function createNote(text, timestamp = null) {
-            if (!text.trim()) return;
-            const note = document.createElement("div");
-            note.classList.add("note");
-            note.dataset.timestamp = timestamp || new Date().toLocaleString();
-            const content = document.createElement("div");
-            content.classList.add("content");
-            content.innerText = text;
-            const timeLabel = document.createElement("div");
-            timeLabel.classList.add("timestamp");
-            timeLabel.innerText = note.dataset.timestamp;
-            note.appendChild(content);
-            note.appendChild(timeLabel);
-            noteContainer.appendChild(note);
-        }
-
-        noteInput.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                const user = auth.currentUser;
-                if (user) {
-                    const timestamp = new Date().toLocaleString();
-                    db.collection("notes").add({ text: noteInput.value, timestamp });
-                    noteInput.value = "";
-                }
-            }
-        });
-
-        db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-            noteContainer.innerHTML = "";
-            snapshot.forEach(doc => {
-                createNote(doc.data().text, doc.data().timestamp);
-            });
-        });
     </script>
+
 </body>
 
 </html>
