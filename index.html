@@ -447,6 +447,7 @@
 
         const user = auth.currentUser;
         const note = document.createElement("div");
+        note.dataset.id = noteId;
         note.classList.add("note");
         note.dataset.timestamp = timestamp;
 
@@ -496,7 +497,7 @@
 
         noteContainer.appendChild(note);
     }
-    // 🔥 監聽 Firestore，刪除畫面上的留言
+
     function removeNote(id) {
         const note = document.querySelector(`.note[data-id='${id}']`);
         if (confirm("確定要刪除這則留言嗎？")) {
