@@ -498,19 +498,13 @@
         noteContainer.appendChild(note);
     }
 
-    noteInput.addEventListener("keydown", async function (e) {
+    noteInput.addEventListener("keydown", function (e) {
         const timestamp = new Date().toISOString();  // 改用 ISO 格式
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             const user = auth.currentUser;
             if (user) {
-                let text = noteInput.value.trim();
-                await db.collection("notes").add({
-                    text: noteInput.value,
-                    timestamp,
-                    userId: user.uid,  // ✅ 記錄使用者的 UID
-                    displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
-                });
+                let text = noteInput.value.trim(); db.collection("notes").add({ text, timestamp });
                 noteInput.value = "";
 
                 // 限制字數
@@ -527,18 +521,14 @@
                         return;
                     }
                 }
-
-                db.collection("notes").add({ text, timestamp });
-                noteInput.value = "";
             }
         }
     });
 
     db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-        const existingNotes = new Set();
-        snapshot.forEach(doc => {
-            existingNotes.add(doc.id);
-            if (!document.querySelector(`[data-id="${doc.id}"]`) && change.type === "added") {
+        snapshot.docChanges().forEach(change => {
+            if (change.type === "added") {
+                const doc = change.doc;
                 createNote(
                     doc.data().text,
                     doc.data().timestamp,
@@ -546,13 +536,11 @@
                     doc.data().userId,
                     doc.data().displayName || "匿名用戶"
                 );
-            }
-        });
-
-        // 移除 Firestore 已刪除的便條紙
-        document.querySelectorAll(".note").forEach(note => {
-            if (!existingNotes.has(note.dataset.id)) {
-                note.remove();
+            } else if (change.type === "removed") {
+                const note = document.querySelector(`[data-id="${change.doc.id}"]`);
+                if (note) {
+                    note.remove();
+                }
             }
         });
     });
