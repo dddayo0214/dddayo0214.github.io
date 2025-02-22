@@ -453,7 +453,10 @@
         auth.signInWithPopup(provider);
     });
 
-    logoutBtn.addEventListener("click", () => { auth.signOut(); });
+    loginBtn.addEventListener("click", () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithRedirect(provider);  // 使用重新導向登入
+    });
 
     function createNote(text, timestamp = null) {
         if (!text.trim()) return;
