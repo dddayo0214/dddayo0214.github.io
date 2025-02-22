@@ -442,35 +442,60 @@
         auth.signInWithPopup(provider);
     });
 
-    function createNote(text, timestamp, id) {
+    function createNote(text, timestamp, noteId, userId, displayName) {
         if (!text.trim()) return;
 
+        const user = auth.currentUser;
         const note = document.createElement("div");
         note.classList.add("note");
-        note.dataset.id = id;  // 儲存 Firestore 的 ID
-        note.dataset.timestamp = timestamp || new Date().toLocaleString();
+        note.dataset.timestamp = timestamp;
 
+        // 顯示使用者名稱
+        const userLabel = document.createElement("div");
+        userLabel.classList.add("user-label");
+        userLabel.innerText = `✏️ ${displayName}`; // 顯示發送者名稱
+        userLabel.style.fontSize = "12px";
+        userLabel.style.fontWeight = "bold";
+        userLabel.style.color = "#333";
+        userLabel.style.marginBottom = "5px";
+
+        // 內容
         const content = document.createElement("div");
         content.classList.add("content");
         content.innerText = text;
 
+        // 時間戳記
         const timeLabel = document.createElement("div");
         timeLabel.classList.add("timestamp");
-        timeLabel.innerText = note.dataset.timestamp;
+        timeLabel.innerText = timestamp;
 
-        // 🔥 刪除按鈕
-        const deleteBtn = document.createElement("button");
-        deleteBtn.innerText = "刪除";
-        deleteBtn.onclick = function () {
-            db.collection("notes").doc(id).delete();
-        };
-
+        note.appendChild(userLabel); // 加入使用者名稱
         note.appendChild(content);
         note.appendChild(timeLabel);
-        note.appendChild(deleteBtn); // 加入刪除按鈕
+
+        // ✅ 只有留言作者才能刪除
+        if (user && user.uid === userId) {
+            const deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "刪除";
+            deleteBtn.style.backgroundColor = "red";
+            deleteBtn.style.color = "white";
+            deleteBtn.style.border = "none";
+            deleteBtn.style.padding = "5px";
+            deleteBtn.style.cursor = "pointer";
+
+            deleteBtn.addEventListener("click", () => {
+                db.collection("notes").doc(noteId).delete().then(() => {
+                    console.log("留言已刪除");
+                }).catch((error) => {
+                    console.error("刪除失敗:", error);
+                });
+            });
+
+            note.appendChild(deleteBtn);
+        }
+
         noteContainer.appendChild(note);
     }
-
     // 🔥 監聽 Firestore，刪除畫面上的留言
     function removeNote(id) {
         const note = document.querySelector(`.note[data-id='${id}']`);
@@ -482,11 +507,19 @@
     }
 
     noteInput.addEventListener("keydown", function (e) {
+        const timestamp = new Date().toISOString();  // 改用 ISO 格式
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             const user = auth.currentUser;
             if (user) {
                 let text = noteInput.value.trim();
+                db.collection("notes").add({
+                    text: noteInput.value,
+                    timestamp,
+                    userId: user.uid,  // ✅ 記錄使用者的 UID
+                    displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
+                });
+                noteInput.value = "";
 
                 // 限制字數
                 if (text.length > 200) {
@@ -503,7 +536,7 @@
                     }
                 }
 
-                const timestamp = new Date().toISOString();  // 改用 ISO 格式
+
                 db.collection("notes").add({ text, timestamp });
                 noteInput.value = "";
             }
@@ -513,7 +546,13 @@
     db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
-                createNote(change.doc.data().text, change.doc.data().timestamp, change.doc.id);
+                createNote(
+                    doc.data().text,
+                    doc.data().timestamp,
+                    doc.id,
+                    doc.data().userId,
+                    doc.data().displayName || "匿名用戶"
+                );
             } else if (change.type === "removed") {
                 removeNote(change.doc.id);
             }
