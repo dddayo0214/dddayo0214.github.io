@@ -26,6 +26,10 @@ canvas {
     z-index: -1;
 }
 
+canvas.not-visible {
+    display: none;
+}
+
 .btn,
 .btn:focus {
     cursor: pointer;
@@ -1086,7 +1090,7 @@ nav {
 
 #note-container {
     width: 80vw;
-    height: 60vh;
+    height: 20vh;
     overflow: auto;
     display: flex;
     flex-wrap: wrap;
@@ -1101,6 +1105,7 @@ nav {
     padding: 10px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     font-size: 14px;
+    color: #0271ba;
     font-family: Arial, sans-serif;
     border-radius: 5px;
     user-select: none;
@@ -1129,6 +1134,9 @@ textarea {
     padding: 5px;
     font-size: 14px;
     resize: none;
+    border-style: outset;
+    border-radius: 2px;
+    border-width: 1px;
 }
 
 /* 瀏覽次數 */

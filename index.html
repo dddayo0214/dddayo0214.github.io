@@ -362,7 +362,16 @@
     </section>
 
     <section class="comment" id="comment">
-
+        <div class="comment-container">
+            <div id="auth-container">
+                <button class="btn" id="login-btn">使用 Google 登入留言!</button>
+                <button class="btn" id="logout-btn" style="display: none;">登出</button>
+            </div>
+            <div id="input-area">
+                <textarea id="note-input" placeholder="輸入留言後按 Enter"></textarea>
+            </div>
+            <div id="note-container"></div>
+        </div>
         <div class="floor"></div>
         <div class="gift-container">
             <div>
@@ -378,16 +387,7 @@
         </div>
     </section>
 
-    <div class="comment-container">
-        <div id="auth-container">
-            <button class="btn" id="login-btn">使用 Google 登入</button>
-            <button class="btn" id="logout-btn" style="display: none;">登出</button>
-        </div>
-        <div id="input-area">
-            <textarea id="note-input" placeholder="輸入留言後按 Enter"></textarea>
-        </div>
-        <div id="note-container"></div>
-    </div>
+
 
     <div class="footer">Copyright &copy Tsai alan</div>
 

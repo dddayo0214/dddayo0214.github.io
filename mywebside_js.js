@@ -567,11 +567,11 @@ function resetValues() {
 }
 
 function closeEffect() {
-    canvas.width = 0;
-    canvas.height = 0;
+    canvas.classList.add('not-visible');
 }
 
 function startEffect() {
+    canvas.classList.remove('not-visible');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
@@ -661,8 +661,6 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
-
-//留言板
 
 //計數器動畫
 const counterUp = window.counterUp.default
