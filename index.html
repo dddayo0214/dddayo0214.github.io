@@ -536,7 +536,6 @@
                     }
                 }
 
-
                 db.collection("notes").add({ text, timestamp });
                 noteInput.value = "";
             }
@@ -544,8 +543,11 @@
     });
 
     db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-        snapshot.docChanges().forEach(change => {
-            if (change.type === "added") {
+        const existingNotes = new Set();
+
+        snapshot.forEach(doc => {
+            existingNotes.add(doc.id);
+            if (!document.querySelector(`[data-id="${doc.id}"]`)) {
                 createNote(
                     doc.data().text,
                     doc.data().timestamp,
@@ -553,8 +555,13 @@
                     doc.data().userId,
                     doc.data().displayName || "匿名用戶"
                 );
-            } else if (change.type === "removed") {
-                removeNote(change.doc.id);
+            }
+        });
+
+        // 移除 Firestore 已刪除的便條紙
+        document.querySelectorAll(".note").forEach(note => {
+            if (!existingNotes.has(note.dataset.id)) {
+                note.remove();
             }
         });
     });
