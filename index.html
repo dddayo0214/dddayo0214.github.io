@@ -457,12 +457,9 @@
     function createNote(text, timestamp, id) {
         if (!text.trim()) return;
 
-        // 檢查是否已經存在相同 ID 的便條紙
-        if (document.querySelector(`.note[data-id='${id}']`)) return;
-
         const note = document.createElement("div");
         note.classList.add("note");
-        note.dataset.id = id;  // 設定 ID，避免重複新增
+        note.dataset.id = id;  // 儲存 Firestore 的 ID
         note.dataset.timestamp = timestamp || new Date().toLocaleString();
 
         const content = document.createElement("div");
@@ -473,16 +470,25 @@
         timeLabel.classList.add("timestamp");
         timeLabel.innerText = note.dataset.timestamp;
 
-        // 刪除按鈕
+        // 🔥 刪除按鈕
         const deleteBtn = document.createElement("button");
-        deleteBtn.innerText = "❌";
-        deleteBtn.classList.add("delete-btn");
-        deleteBtn.onclick = () => deleteNote(id);
+        deleteBtn.innerText = "刪除";
+        deleteBtn.onclick = function () {
+            db.collection("notes").doc(id).delete();
+        };
 
         note.appendChild(content);
         note.appendChild(timeLabel);
-        note.appendChild(deleteBtn);
+        note.appendChild(deleteBtn); // 加入刪除按鈕
         noteContainer.appendChild(note);
+    }
+
+    // 🔥 監聽 Firestore，刪除畫面上的留言
+    function removeNote(id) {
+        const note = document.querySelector(`.note[data-id='${id}']`);
+        if (note) {
+            note.remove();
+        }
     }
 
     noteInput.addEventListener("keydown", function (e) {
@@ -550,72 +556,6 @@
     auth.onAuthStateChanged(user => {
         updateUI(user);
     });
-
-    const maxChars = 100;
-
-    noteInput.addEventListener("input", function () {
-        if (noteInput.value.length > maxChars) {
-            noteInput.value = noteInput.value.substring(0, maxChars);
-            alert("留言最多只能輸入 100 字！");
-        }
-    });
-
-    function createNote(text, timestamp, id) {
-        if (!text.trim()) return;
-
-        const note = document.createElement("div");
-        note.classList.add("note");
-        note.dataset.id = id; // 記錄 Firebase 的 ID
-
-        const content = document.createElement("div");
-        content.classList.add("content");
-        content.innerText = text;
-
-        const timeLabel = document.createElement("div");
-        timeLabel.classList.add("timestamp");
-        timeLabel.innerText = timestamp;
-
-        // 🔥 新增刪除按鈕
-        const deleteBtn = document.createElement("button");
-        deleteBtn.innerText = "刪除";
-        deleteBtn.style.marginTop = "5px";
-        deleteBtn.style.cursor = "pointer";
-        deleteBtn.onclick = function () {
-            deleteNote(id);
-        };
-
-        function deleteNote(id) {
-            if (confirm("確定要刪除這則留言嗎？")) {
-                db.collection("notes").doc(id).delete();
-            }
-        }
-
-        db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-            snapshot.docChanges().forEach(change => {
-                if (change.type === "added") {
-                    createNote(change.doc.data().text, change.doc.data().timestamp, change.doc.id);
-                } else if (change.type === "removed") {
-                    removeNote(change.doc.id);
-                }
-            });
-        });
-
-        function deleteNote(id) {
-            db.collection("notes").doc(id).delete();
-        }
-
-        function removeNote(id) {
-            const note = document.querySelector(`.note[data-id='${id}']`);
-            if (note) {
-                note.remove();
-            }
-        }
-
-        note.appendChild(content);
-        note.appendChild(timeLabel);
-        note.appendChild(deleteBtn); // 加入刪除按鈕
-        noteContainer.appendChild(note);
-    }
 </script>
 
 </html>
