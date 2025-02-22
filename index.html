@@ -498,14 +498,14 @@
         noteContainer.appendChild(note);
     }
 
-    noteInput.addEventListener("keydown", function (e) {
+    noteInput.addEventListener("keydown", async function (e) {
         const timestamp = new Date().toISOString();  // 改用 ISO 格式
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             const user = auth.currentUser;
             if (user) {
                 let text = noteInput.value.trim();
-                db.collection("notes").add({
+                await db.collection("notes").add({
                     text: noteInput.value,
                     timestamp,
                     userId: user.uid,  // ✅ 記錄使用者的 UID
@@ -538,13 +538,13 @@
         const existingNotes = new Set();
         snapshot.forEach(doc => {
             existingNotes.add(doc.id);
-            if (!document.querySelector(`[data-id="${doc.id}"]`)) {
+            if (!document.querySelector(`[data-id="${doc.id}"]`) && change.type === "added") {
                 createNote(
                     doc.data().text,
                     doc.data().timestamp,
                     doc.id,
                     doc.data().userId,
-                    doc.data().displayName
+                    doc.data().displayName || "匿名用戶"
                 );
             }
         });
