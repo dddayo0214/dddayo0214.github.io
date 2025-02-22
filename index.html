@@ -435,18 +435,6 @@
     const noteContainer = document.getElementById("note-container");
     const noteInput = document.getElementById("note-input");
 
-    function updateUI(user) {
-        if (user) {
-            loginBtn.style.display = "none";
-            logoutBtn.style.display = "block";
-            inputArea.style.display = "block";
-        } else {
-            loginBtn.style.display = "block";
-            logoutBtn.style.display = "none";
-            inputArea.style.display = "none";
-        }
-    }
-
     auth.onAuthStateChanged(user => { updateUI(user); });
 
     loginBtn.addEventListener("click", () => {
@@ -486,8 +474,10 @@
     // 🔥 監聽 Firestore，刪除畫面上的留言
     function removeNote(id) {
         const note = document.querySelector(`.note[data-id='${id}']`);
-        if (note) {
-            note.remove();
+        if (confirm("確定要刪除這則留言嗎？")) {
+            if (note) {
+                note.remove();
+            }
         }
     }
 
@@ -530,6 +520,16 @@
         });
     });
 
+    logoutBtn.addEventListener("click", () => {
+        auth.signOut().then(() => {
+            alert("已成功登出！");
+            updateUI(null); // 確保 UI 也同步更新
+        }).catch((error) => {
+            console.error("登出失敗:", error);
+            alert("登出失敗，請稍後再試！");
+        });
+    });
+
     function updateUI(user) {
         const userInfo = document.getElementById("user-info");
         const userNameSpan = document.getElementById("user-name");
@@ -556,6 +556,7 @@
     auth.onAuthStateChanged(user => {
         updateUI(user);
     });
+
 </script>
 
 </html>
