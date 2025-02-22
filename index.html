@@ -504,7 +504,13 @@
             e.preventDefault();
             const user = auth.currentUser;
             if (user) {
-                let text = noteInput.value.trim(); db.collection("notes").add({ text, timestamp });
+                let text = noteInput.value.trim();
+                db.collection("notes").add({
+                    text: noteInput.value,
+                    timestamp,
+                    userId: user.uid,  // ✅ 記錄使用者的 UID
+                    displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
+                });
                 noteInput.value = "";
 
                 // 限制字數
@@ -514,7 +520,7 @@
                 }
 
                 // 過濾爆言
-                const bannedWords = ["髒話1", "髒話2", "禁詞"];  // 替換成你要過濾的詞
+                const bannedWords = ["髒話1", "髒話2", "禁詞"];
                 for (let word of bannedWords) {
                     if (text.includes(word)) {
                         alert("留言包含禁用詞彙！");
@@ -527,16 +533,7 @@
 
     db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
-            if (change.type === "added") {
-                const doc = change.doc;
-                createNote(
-                    doc.data().text,
-                    doc.data().timestamp,
-                    doc.id,
-                    doc.data().userId,
-                    doc.data().displayName || "匿名用戶"
-                );
-            } else if (change.type === "removed") {
+            if (change.type === "removed") {
                 const note = document.querySelector(`[data-id="${change.doc.id}"]`);
                 if (note) {
                     note.remove();
