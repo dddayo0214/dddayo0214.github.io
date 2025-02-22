@@ -410,7 +410,8 @@
         const db = firebase.firestore();
 
         // 計算瀏覽次數
-        const counterRef = firebase.ref(db, 'page_views');
+        const database = firebase.database();
+        const counterRef = database.ref(db, 'page_views');
         firebase.runTransaction(counterRef, (current) => {
             return (current || 0) + 1;
         }).then(({ snapshot }) => {
