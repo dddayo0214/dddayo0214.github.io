@@ -586,11 +586,21 @@
         }
 
         db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-            noteContainer.innerHTML = "";
-            snapshot.forEach(doc => {
-                createNote(doc.data().text, doc.data().timestamp, doc.id);
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    createNote(change.doc.data().text, change.doc.data().timestamp, change.doc.id);
+                } else if (change.type === "removed") {
+                    removeNote(change.doc.id);
+                }
             });
         });
+
+        function removeNote(id) {
+            const note = document.querySelector(`.note[data-id='${id}']`);
+            if (note) {
+                note.remove();  // 只刪除對應的留言，不影響其他留言
+            }
+        }
 
         note.appendChild(content);
         note.appendChild(timeLabel);
