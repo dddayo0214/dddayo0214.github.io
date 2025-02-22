@@ -508,6 +508,7 @@
             e.preventDefault();
             const user = auth.currentUser;
             if (user) {
+                let text = noteInput.value.trim();
                 // 🔥 限制便條紙數量（例如：最多 5 張）
                 const userNotes = db.collection("notes")
                     .where("userId", "==", user.uid)
@@ -518,7 +519,6 @@
                             return;
                         }
 
-                        let text = noteInput.value.trim();
                         db.collection("notes").add({
                             text: noteInput.value,
                             timestamp,
