@@ -394,102 +394,99 @@
 </body>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Firebase 設定
-        const firebaseConfig = {
-            apiKey: "AIzaSyAPuD2i6aqk77vh7A6C3Nctri2m-YQrdjA",
-            authDomain: "my-webside-97ee7.firebaseapp.com",
-            databaseURL: "https://my-webside-97ee7-default-rtdb.firebaseio.com",
-            projectId: "my-webside-97ee7",
-            storageBucket: "my-webside-97ee7.firebasestorage.app",
-            messagingSenderId: "131325164583",
-            appId: "1:131325164583:web:8c1cc0c4636d72e3916202",
-            measurementId: "G-HCZ5T7EK4F"
-        };
+    // 初始化 Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAPuD2i6aqk77vh7A6C3Nctri2m-YQrdjA",
+        authDomain: "my-webside-97ee7.firebaseapp.com",
+        databaseURL: "https://my-webside-97ee7-default-rtdb.firebaseio.com",
+        projectId: "my-webside-97ee7",
+        storageBucket: "my-webside-97ee7.appspot.com",
+        messagingSenderId: "131325164583",
+        appId: "1:131325164583:web:8c1cc0c4636d72e3916202",
+        measurementId: "G-HCZ5T7EK4F"
+    };
 
-        // 初始化 Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const database = firebase.database();
 
-        // 計算瀏覽次數
-        const database = firebase.database();
-        const counterRef = database.ref(db, 'page_views');
-        firebase.runTransaction(counterRef, (current) => {
-            return (current || 0) + 1;
-        }).then(({ snapshot }) => {
-            document.querySelector('.counter').innerText = snapshot.val();
-        }).catch((error) => {
-            console.error("更新計數失敗:", error);
-        });
+    // 瀏覽次數計數
+    const counterRef = database.ref("page_views");
+    counterRef.transaction((current) => {
+        return (current || 0) + 1;
+    }).then(({ snapshot }) => {
+        document.querySelector('.counter').innerText = snapshot.val();
+    }).catch((error) => {
+        console.error("更新計數失敗:", error);
+    });
 
-        // 使用 LocalStorage 計算瀏覽次數
-        let count = localStorage.getItem('page_views') || 0;
-        count++;
-        localStorage.setItem('page_views', count);
-        document.getElementById('userVisitor-count').innerText = count;
+    // 使用 LocalStorage 計算瀏覽次數
+    let count = localStorage.getItem('page_views') || 0;
+    count++;
+    localStorage.setItem('page_views', count);
+    document.getElementById('userVisitor-count').innerText = count;
 
-        // 留言板
-        const loginBtn = document.getElementById("login-btn");
-        const logoutBtn = document.getElementById("logout-btn");
-        const inputArea = document.getElementById("input-area");
-        const noteContainer = document.getElementById("note-container");
-        const noteInput = document.getElementById("note-input");
+    // 留言板功能
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const inputArea = document.getElementById("input-area");
+    const noteContainer = document.getElementById("note-container");
+    const noteInput = document.getElementById("note-input");
 
-        function updateUI(user) {
+    function updateUI(user) {
+        if (user) {
+            loginBtn.style.display = "none";
+            logoutBtn.style.display = "block";
+            inputArea.style.display = "block";
+        } else {
+            loginBtn.style.display = "block";
+            logoutBtn.style.display = "none";
+            inputArea.style.display = "none";
+        }
+    }
+
+    auth.onAuthStateChanged(user => { updateUI(user); });
+
+    loginBtn.addEventListener("click", () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider);
+    });
+
+    logoutBtn.addEventListener("click", () => { auth.signOut(); });
+
+    function createNote(text, timestamp = null) {
+        if (!text.trim()) return;
+        const note = document.createElement("div");
+        note.classList.add("note");
+        note.dataset.timestamp = timestamp || new Date().toLocaleString();
+        const content = document.createElement("div");
+        content.classList.add("content");
+        content.innerText = text;
+        const timeLabel = document.createElement("div");
+        timeLabel.classList.add("timestamp");
+        timeLabel.innerText = note.dataset.timestamp;
+        note.appendChild(content);
+        note.appendChild(timeLabel);
+        noteContainer.appendChild(note);
+    }
+
+    noteInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            const user = auth.currentUser;
             if (user) {
-                loginBtn.style.display = "none";
-                logoutBtn.style.display = "block";
-                inputArea.style.display = "block";
-            } else {
-                loginBtn.style.display = "block";
-                logoutBtn.style.display = "none";
-                inputArea.style.display = "none";
+                const timestamp = new Date().toLocaleString();
+                db.collection("notes").add({ text: noteInput.value, timestamp });
+                noteInput.value = "";
             }
         }
+    });
 
-        auth.onAuthStateChanged(user => { updateUI(user); });
-
-        loginBtn.addEventListener("click", () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider);
-        });
-
-        logoutBtn.addEventListener("click", () => { auth.signOut(); });
-
-        function createNote(text, timestamp = null) {
-            if (!text.trim()) return;
-            const note = document.createElement("div");
-            note.classList.add("note");
-            note.dataset.timestamp = timestamp || new Date().toLocaleString();
-            const content = document.createElement("div");
-            content.classList.add("content");
-            content.innerText = text;
-            const timeLabel = document.createElement("div");
-            timeLabel.classList.add("timestamp");
-            timeLabel.innerText = note.dataset.timestamp;
-            note.appendChild(content);
-            note.appendChild(timeLabel);
-            noteContainer.appendChild(note);
-        }
-
-        noteInput.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                const user = auth.currentUser;
-                if (user) {
-                    const timestamp = new Date().toLocaleString();
-                    db.collection("notes").add({ text: noteInput.value, timestamp });
-                    noteInput.value = "";
-                }
-            }
-        });
-
-        db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-            noteContainer.innerHTML = "";
-            snapshot.forEach(doc => {
-                createNote(doc.data().text, doc.data().timestamp);
-            });
+    db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
+        noteContainer.innerHTML = "";
+        snapshot.forEach(doc => {
+            createNote(doc.data().text, doc.data().timestamp);
         });
     });
 </script>
