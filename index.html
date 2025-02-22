@@ -367,6 +367,9 @@
                 <button class="btn" id="login-btn">使用 Google 登入留言!</button>
                 <button class="btn" id="logout-btn" style="display: none;">登出</button>
             </div>
+            <div id="user-info" style="display: none;">
+                <p>歡迎，<span id="user-name"></span>！</p>
+            </div>
             <div id="input-area">
                 <textarea id="note-input" placeholder="輸入留言後按 Enter"></textarea>
             </div>
@@ -386,8 +389,6 @@
             </div>
         </div>
     </section>
-
-
 
     <div class="footer">Copyright &copy Tsai alan</div>
 
@@ -492,6 +493,110 @@
             createNote(doc.data().text, doc.data().timestamp);
         });
     });
+
+    function updateUI(user) {
+        const userInfo = document.getElementById("user-info");
+        const userNameSpan = document.getElementById("user-name");
+
+        if (user) {
+            loginBtn.style.display = "none";
+            logoutBtn.style.display = "block";
+            inputArea.style.display = "block";
+
+            // 顯示使用者名稱
+            userInfo.style.display = "block";
+            userNameSpan.textContent = user.displayName || "訪客"; // 如果沒有名稱，顯示「訪客」
+        } else {
+            loginBtn.style.display = "block";
+            logoutBtn.style.display = "none";
+            inputArea.style.display = "none";
+
+            // 隱藏使用者資訊
+            userInfo.style.display = "none";
+        }
+    }
+
+    // 當登入狀態改變時更新 UI
+    auth.onAuthStateChanged(user => {
+        updateUI(user);
+    });
+
+    const maxChars = 100;
+
+    noteInput.addEventListener("input", function () {
+        if (noteInput.value.length > maxChars) {
+            noteInput.value = noteInput.value.substring(0, maxChars);
+            alert("留言最多只能輸入 100 字！");
+        }
+    });
+
+    const forbiddenWords = ["髒話1", "髒話2", "髒話3"]; // 這裡填入你要禁止的字詞
+
+    function containsForbiddenWords(text) {
+        return forbiddenWords.some(word => text.includes(word));
+    }
+
+    noteInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            const user = auth.currentUser;
+            const message = noteInput.value.trim();
+
+            if (!user) return;
+            if (message.length === 0) return;
+            if (containsForbiddenWords(message)) {
+                alert("留言內容包含禁用詞彙！");
+                return;
+            }
+
+            const timestamp = new Date().toLocaleString();
+            db.collection("notes").add({ text: message, timestamp });
+            noteInput.value = "";
+        }
+    });
+
+    function createNote(text, timestamp, id) {
+        if (!text.trim()) return;
+
+        const note = document.createElement("div");
+        note.classList.add("note");
+        note.dataset.id = id; // 記錄 Firebase 的 ID
+
+        const content = document.createElement("div");
+        content.classList.add("content");
+        content.innerText = text;
+
+        const timeLabel = document.createElement("div");
+        timeLabel.classList.add("timestamp");
+        timeLabel.innerText = timestamp;
+
+        // 🔥 新增刪除按鈕
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "刪除";
+        deleteBtn.style.marginTop = "5px";
+        deleteBtn.style.cursor = "pointer";
+        deleteBtn.onclick = function () {
+            deleteNote(id);
+        };
+
+        function deleteNote(id) {
+            if (confirm("確定要刪除這則留言嗎？")) {
+                db.collection("notes").doc(id).delete();
+            }
+        }
+
+        db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
+            noteContainer.innerHTML = "";
+            snapshot.forEach(doc => {
+                createNote(doc.data().text, doc.data().timestamp, doc.id);
+            });
+        });
+
+        note.appendChild(content);
+        note.appendChild(timeLabel);
+        note.appendChild(deleteBtn); // 加入刪除按鈕
+        noteContainer.appendChild(note);
+    }
 </script>
 
 </html>
