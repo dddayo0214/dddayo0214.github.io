@@ -485,26 +485,17 @@
             deleteBtn.style.cursor = "pointer";
 
             deleteBtn.addEventListener("click", () => {
-                db.collection("notes").doc(noteId).delete().then(() => {
-                    console.log("留言已刪除");
-                }).catch((error) => {
-                    console.error("刪除失敗:", error);
-                });
+                if (confirm("確定要刪除這則留言嗎？")) {
+                    db.collection("notes").doc(noteId).delete().then(() => {
+                        console.log("留言已刪除");
+                    }).catch((error) => {
+                        console.error("刪除失敗:", error);
+                    });
+                }
             });
-
             note.appendChild(deleteBtn);
         }
-
         noteContainer.appendChild(note);
-    }
-
-    function removeNote(id) {
-        const note = document.querySelector(`.note[data-id='${id}']`);
-        if (confirm("確定要刪除這則留言嗎？")) {
-            if (note) {
-                note.remove();
-            }
-        }
     }
 
     noteInput.addEventListener("keydown", function (e) {
@@ -545,7 +536,6 @@
 
     db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
         const existingNotes = new Set();
-
         snapshot.forEach(doc => {
             existingNotes.add(doc.id);
             if (!document.querySelector(`[data-id="${doc.id}"]`)) {
@@ -554,7 +544,7 @@
                     doc.data().timestamp,
                     doc.id,
                     doc.data().userId,
-                    doc.data().displayName || "匿名用戶"
+                    doc.data().displayName
                 );
             }
         });
