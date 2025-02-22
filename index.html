@@ -474,7 +474,8 @@
         note.appendChild(content);
         note.appendChild(timeLabel);
 
-        // 只有留言作者才能刪除
+        // ✅ 只有留言作者才能刪除
+
         const deleteBtn = document.createElement("button");
         deleteBtn.innerText = "刪除";
         deleteBtn.style.backgroundColor = "red";
@@ -491,12 +492,12 @@
                         console.error("刪除失敗:", error);
                     });
                 }
-                note.appendChild(deleteBtn);
             }
             else {
                 alert("只有留言作者才能刪除留言！");
             }
-        });
+
+        }); note.appendChild(deleteBtn);
         noteContainer.appendChild(note);
     }
 
