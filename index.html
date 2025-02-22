@@ -490,17 +490,37 @@
             e.preventDefault();
             const user = auth.currentUser;
             if (user) {
-                const timestamp = new Date().toLocaleString();
-                db.collection("notes").add({ text: noteInput.value, timestamp });
+                let text = noteInput.value.trim();
+
+                // 限制字數
+                if (text.length > 200) {
+                    alert("留言最多 200 字！");
+                    return;
+                }
+
+                // 過濾爆言
+                const bannedWords = ["髒話1", "髒話2", "禁詞"];  // 替換成你要過濾的詞
+                for (let word of bannedWords) {
+                    if (text.includes(word)) {
+                        alert("留言包含禁用詞彙！");
+                        return;
+                    }
+                }
+
+                const timestamp = new Date().toISOString();  // 改用 ISO 格式
+                db.collection("notes").add({ text, timestamp });
                 noteInput.value = "";
             }
         }
     });
 
     db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-        noteContainer.innerHTML = "";
-        snapshot.forEach(doc => {
-            createNote(doc.data().text, doc.data().timestamp);
+        snapshot.docChanges().forEach(change => {
+            if (change.type === "added") {
+                createNote(change.doc.data().text, change.doc.data().timestamp, change.doc.id);
+            } else if (change.type === "removed") {
+                removeNote(change.doc.id);
+            }
         });
     });
 
@@ -537,31 +557,6 @@
         if (noteInput.value.length > maxChars) {
             noteInput.value = noteInput.value.substring(0, maxChars);
             alert("留言最多只能輸入 100 字！");
-        }
-    });
-
-    const forbiddenWords = ["髒話1", "髒話2", "髒話3"]; // 這裡填入你要禁止的字詞
-
-    function containsForbiddenWords(text) {
-        return forbiddenWords.some(word => text.includes(word));
-    }
-
-    noteInput.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            const user = auth.currentUser;
-            const message = noteInput.value.trim();
-
-            if (!user) return;
-            if (message.length === 0) return;
-            if (containsForbiddenWords(message)) {
-                alert("留言內容包含禁用詞彙！");
-                return;
-            }
-
-            const timestamp = new Date().toLocaleString();
-            db.collection("notes").add({ text: message, timestamp });
-            noteInput.value = "";
         }
     });
 
@@ -612,7 +607,7 @@
         function removeNote(id) {
             const note = document.querySelector(`.note[data-id='${id}']`);
             if (note) {
-                note.remove();  // 只刪除對應的留言，不影響其他留言
+                note.remove();
             }
         }
 
