@@ -454,24 +454,34 @@
         auth.signInWithPopup(provider);
     });
 
-    loginBtn.addEventListener("click", () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithRedirect(provider);  // 使用重新導向登入
-    });
-
-    function createNote(text, timestamp = null) {
+    function createNote(text, timestamp, id) {
         if (!text.trim()) return;
+
+        // 檢查是否已經存在相同 ID 的便條紙
+        if (document.querySelector(`.note[data-id='${id}']`)) return;
+
         const note = document.createElement("div");
         note.classList.add("note");
+        note.dataset.id = id;  // 設定 ID，避免重複新增
         note.dataset.timestamp = timestamp || new Date().toLocaleString();
+
         const content = document.createElement("div");
         content.classList.add("content");
         content.innerText = text;
+
         const timeLabel = document.createElement("div");
         timeLabel.classList.add("timestamp");
         timeLabel.innerText = note.dataset.timestamp;
+
+        // 刪除按鈕
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "❌";
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.onclick = () => deleteNote(id);
+
         note.appendChild(content);
         note.appendChild(timeLabel);
+        note.appendChild(deleteBtn);
         noteContainer.appendChild(note);
     }
 
@@ -594,6 +604,10 @@
                 }
             });
         });
+
+        function deleteNote(id) {
+            db.collection("notes").doc(id).delete();
+        }
 
         function removeNote(id) {
             const note = document.querySelector(`.note[data-id='${id}']`);
