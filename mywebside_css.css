@@ -1170,12 +1170,6 @@ textarea {
     visibility: hidden;
 }
 
-#user-info {
-    font-family: 'Rampart One', cursive;
-    font-size: 5em;
-    margin: 100vh auto 40vh;
-}
-
 /* 動畫 */
 @keyframes fall {
     0% {
