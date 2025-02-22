@@ -533,7 +533,9 @@
 
     db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
-            if (change.type === "removed") {
+            if (change.type === "added") {
+                const doc = change.doc;
+            } else if (change.type === "removed") {
                 const note = document.querySelector(`[data-id="${change.doc.id}"]`);
                 if (note) {
                     note.remove();
