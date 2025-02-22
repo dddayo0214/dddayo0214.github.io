@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ribbon = document.getElementById('ribbon');
     const resetHint = document.getElementById('resetHint');
     const setHint = document.getElementById('setHint');
+    const commentHint = document.getElementById('commentHint');
     let isLidDropped = false;
     let isDragging = false;
     let initialX = 0, initialY = 0;
@@ -532,26 +533,6 @@ function toggleAchievements(achievement) {
     document.addEventListener('keydown', escHandler);
 }
 
-const counterUp = window.counterUp.default
-
-const callback = entries => {
-    entries.forEach(entry => {
-        const el = entry.target
-        if (entry.isIntersecting && !el.classList.contains('is-visible')) {
-            counterUp(el, {
-                duration: 2000,
-                delay: 16,
-            })
-            el.classList.add('is-visible')
-        }
-    })
-}
-
-const IO = new IntersectionObserver(callback, { threshold: 1 })
-
-const el = document.querySelector('.counter')
-IO.observe(el)
-
 window.addEventListener('load', function () {
     setTimeout(function () {
         window.scrollTo(0, 1);
@@ -680,6 +661,37 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+//留言板
+
+//計數器動畫
+const counterUp = window.counterUp.default
+
+const callback = entries => {
+    entries.forEach(entry => {
+        const el = entry.target;
+        const el2 = entry.target;
+        if (entry.isIntersecting && !el.classList.contains('is-visible')) {
+            counterUp(el, {
+                duration: 2000,
+                delay: 16,
+            })
+            counterUp(el2, {
+                duration: 2000,
+                delay: 16,
+            })
+            el.classList.add('is-visible');
+            el2.classList.add('is-visible');
+        }
+    })
+}
+
+const IO = new IntersectionObserver(callback, { threshold: 1 })
+
+const el = document.querySelector('.counter')
+const el2 = document.querySelector('.userCounter')
+IO.observe(el)
+IO.observe(el2)
 
 // GA
 // window.dataLayer = window.dataLayer || [];

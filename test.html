@@ -4,359 +4,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D禮物盒</title>
+    <title>便條紙留言板</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     <style>
-        /* 前面的樣式保持不變 */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: #f5f8fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            perspective: 1000px;
+            background: #f0f0f0;
+            height: 100vh;
             overflow: hidden;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .scene {
-            width: 200px;
-            height: 200px;
-            position: relative;
-            transform-style: preserve-3d;
-            perspective: 1000px;
+        #auth-container {
+            margin-bottom: 10px;
         }
 
-        .gift-box {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transform: rotateX(10deg);
+        button {
+            padding: 10px;
+            margin: 5px;
             cursor: pointer;
         }
 
-        .box-lid {
-            position: absolute;
-            width: 100%;
-            height: 40px;
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            top: 0;
-            left: 0;
-            border-radius: 5px;
-            transform-origin: center;
-            cursor: grab;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transform-style: preserve-3d;
-            z-index: 100;
+        #note-container {
+            width: 80vw;
+            height: 60vh;
+            background: #fff;
+            border: 2px solid #ddd;
+            overflow: auto;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px;
+            position: relative;
         }
 
-        .box-lid.dragging {
-            cursor: grabbing;
-            opacity: 0.9;
-        }
-
-        .box-base {
-            position: absolute;
-            width: 100%;
-            height: calc(100% - 40px);
-            background: linear-gradient(45deg, #d35400, #e67e22);
-            bottom: 0;
-            border-radius: 5px;
-            transform-style: preserve-3d;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .gift-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateZ(1px);
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 18px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f39c12;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        @keyframes dropLid {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-
-            100% {
-                transform: translate(150px, 100px) rotate(20deg);
-            }
-        }
-
-        .box-lid.dropped {
-            animation: dropLid 0.5s forwards cubic-bezier(0.3, 0.7, 0.4, 1.4);
-        }
-
-        .active-confetti {
-            animation: fall 1.5s ease-out forwards;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(1000px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .floor {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
-            transform: rotateX(90deg);
-            transform-origin: bottom;
-        }
-
-        .ribbon {
-            position: absolute;
-            width: 30px;
-            height: 60%;
-            background: #3498db;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 0;
-            z-index: 2;
-            transition: all 0.5s ease;
-        }
-
-        .ribbon::before,
-        .ribbon::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 30px;
-            background: #2980b9;
-            border-radius: 15px;
-            transition: all 0.5s ease;
-        }
-
-        .ribbon::before {
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%) rotate(90deg);
-        }
-
-        .ribbon::after {
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .ribbon.untied {
-            transform: translateX(-50%) scaleY(0);
-        }
-
-        .ribbon.untied::before {
-            transform: translateX(-150%) rotate(45deg);
-        }
-
-        .ribbon.untied::after {
-            transform: translateX(50%) rotate(-45deg);
-        }
-
-        .reset-hint {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
+        .note {
+            width: 180px;
+            min-height: 100px;
+            background: #fffa8c;
+            padding: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
             font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
+            font-family: Arial, sans-serif;
+            border-radius: 5px;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+            position: relative;
         }
 
-        .reset-hint.visible {
-            opacity: 1;
+        .timestamp {
+            font-size: 10px;
+            color: gray;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        #input-area {
+            width: 80vw;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        textarea {
+            width: 100%;
+            height: 60px;
+            padding: 5px;
+            font-size: 14px;
+            resize: none;
         }
     </style>
 </head>
 
 <body>
-    <div class="reset-hint" id="resetHint">拖動蓋子回到禮物盒頂端以重置</div>
-    <div class="floor"></div>
-    <div class="scene">
-        <div class="gift-box" id="giftBox">
-            <div class="box-lid" id="boxLid"></div>
-            <div class="box-base"></div>
-            <div class="ribbon" id="ribbon"></div>
-        </div>
-        <div class="gift-text" id="giftText">生日快樂！</div>
+    <div id="auth-container">
+        <button id="login-btn">使用 Google 登入</button>
+        <button id="logout-btn" style="display: none;">登出</button>
     </div>
+    <div id="input-area">
+        <textarea id="note-input" placeholder="輸入留言後按 Enter"></textarea>
+    </div>
+    <div id="note-container"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const boxLid = document.getElementById('boxLid');
-            const giftText = document.getElementById('giftText');
-            const giftBox = document.getElementById('giftBox');
-            const ribbon = document.getElementById('ribbon');
-            const resetHint = document.getElementById('resetHint');
-            let isLidDropped = false;
-            let isDragging = false;
-            let startX, startY, initialX, initialY;
+        const firebaseConfig = {
+            apiKey: "你的API_KEY",
+            authDomain: "你的AUTH_DOMAIN",
+            projectId: "你的PROJECT_ID",
+            storageBucket: "你的STORAGE_BUCKET",
+            messagingSenderId: "你的MESSAGING_SENDER_ID",
+            appId: "你的APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-            giftBox.addEventListener('click', () => {
-                if (!isLidDropped && !isDragging) {
-                    ribbon.classList.add('untied');
-                    setTimeout(() => {
-                        // 移除任何之前的transform樣式
-                        boxLid.style.transform = '';
-                        // 確保dropped類別被移除後再添加
-                        boxLid.classList.remove('dropped');
-                        // 強制重繪
-                        void boxLid.offsetWidth;
-                        // 添加dropped類別
-                        boxLid.classList.add('dropped');
-                        createConfetti();
-                        giftText.style.opacity = '1';
-                        resetHint.classList.add('visible');
-                    }, 500);
-                    isLidDropped = true;
-                }
-            });
+        const loginBtn = document.getElementById("login-btn");
+        const logoutBtn = document.getElementById("logout-btn");
+        const inputArea = document.getElementById("input-area");
+        const noteContainer = document.getElementById("note-container");
+        const noteInput = document.getElementById("note-input");
 
-            boxLid.addEventListener('mousedown', startDragging);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', stopDragging);
+        function updateUI(user) {
+            if (user) {
+                loginBtn.style.display = "none";
+                logoutBtn.style.display = "block";
+                inputArea.style.display = "block";
+            } else {
+                loginBtn.style.display = "block";
+                logoutBtn.style.display = "none";
+                inputArea.style.display = "none";
+            }
+        }
 
-            boxLid.addEventListener('touchstart', (e) => {
+        auth.onAuthStateChanged(user => { updateUI(user); });
+
+        loginBtn.addEventListener("click", () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider);
+        });
+
+        logoutBtn.addEventListener("click", () => { auth.signOut(); });
+
+        function createNote(text, timestamp = null) {
+            if (!text.trim()) return;
+            const note = document.createElement("div");
+            note.classList.add("note");
+            note.dataset.timestamp = timestamp || new Date().toLocaleString();
+            const content = document.createElement("div");
+            content.classList.add("content");
+            content.innerText = text;
+            const timeLabel = document.createElement("div");
+            timeLabel.classList.add("timestamp");
+            timeLabel.innerText = note.dataset.timestamp;
+            note.appendChild(content);
+            note.appendChild(timeLabel);
+            noteContainer.appendChild(note);
+        }
+
+        noteInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                startDragging(e.touches[0]);
+                const user = auth.currentUser;
+                if (user) {
+                    const timestamp = new Date().toLocaleString();
+                    db.collection("notes").add({ text: noteInput.value, timestamp });
+                    noteInput.value = "";
+                }
+            }
+        });
+
+        db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
+            noteContainer.innerHTML = "";
+            snapshot.forEach(doc => {
+                createNote(doc.data().text, doc.data().timestamp);
             });
-            document.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                drag(e.touches[0]);
-            });
-            document.addEventListener('touchend', stopDragging);
-
-            function startDragging(e) {
-                if (!isLidDropped) return;
-                isDragging = true;
-                boxLid.classList.add('dragging');
-                boxLid.classList.remove('dropped');
-
-                const rect = boxLid.getBoundingClientRect();
-                initialX = rect.left;
-                initialY = rect.top;
-                startX = e.clientX - initialX;
-                startY = e.clientY - initialY;
-
-                // 保存當前位置
-                const currentTransform = window.getComputedStyle(boxLid).transform;
-                if (currentTransform !== 'none') {
-                    boxLid.style.transform = currentTransform;
-                }
-            }
-
-            function drag(e) {
-                if (!isDragging) return;
-
-                const x = e.clientX - startX;
-                const y = e.clientY - startY;
-                boxLid.style.transform = `translate(${x}px, ${y}px)`;
-
-                if (Math.abs(x) < 50 && Math.abs(y) < 50) {
-                    resetHint.style.color = '#4CAF50';
-                } else {
-                    resetHint.style.color = 'white';
-                }
-            }
-
-            function stopDragging() {
-                if (!isDragging) return;
-                isDragging = false;
-                boxLid.classList.remove('dragging');
-
-                const transform = new DOMMatrix(getComputedStyle(boxLid).transform);
-                const x = transform.m41;
-                const y = transform.m42;
-
-                if (Math.abs(x) < 50 && Math.abs(y) < 50) {
-                    resetGiftBox();
-                }
-            }
-
-            function resetGiftBox() {
-                // 移除所有transform和動畫相關的樣式
-                boxLid.style.transform = '';
-                boxLid.style.animation = '';
-                boxLid.classList.remove('dropped');
-                ribbon.classList.remove('untied');
-                giftText.style.opacity = '0';
-                isLidDropped = false;
-                resetHint.classList.remove('visible');
-
-                // 強制重繪
-                void boxLid.offsetWidth;
-            }
-
-            function createConfetti() {
-                document.querySelectorAll('.confetti').forEach(el => el.remove());
-
-                const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
-
-                for (let i = 0; i < 50; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-
-                    confetti.style.left = `${Math.random() * window.innerWidth}px`;
-                    confetti.style.top = `${Math.random() * window.innerHeight / 2}px`;
-
-                    const size = Math.floor(Math.random() * 10) + 5;
-                    confetti.style.width = `${size}px`;
-                    confetti.style.height = `${size}px`;
-
-                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-
-                    document.body.appendChild(confetti);
-
-                    setTimeout(() => {
-                        confetti.classList.add('active-confetti');
-                    }, 10);
-
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 2000);
-                }
-            }
         });
     </script>
 </body>
