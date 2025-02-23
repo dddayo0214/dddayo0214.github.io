@@ -371,7 +371,9 @@
                 <p>歡迎，<span id="user-name"></span>！</p>
             </div>
             <div class="input-container" id="input-area">
-                <input type="text" placeholder="輸入留言後按 Enter" oninput="createParticles(event)" required>
+                <input type="text" id="techInput" placeholder="請輸入資料" onfocus="this.placeholder=''"
+                    onblur="this.placeholder='請輸入資料'">
+                <label for="techInput"></label>
             </div>
             <div class="note-container2">
                 <div id="note-container"></div>

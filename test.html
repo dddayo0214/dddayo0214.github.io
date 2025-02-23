@@ -58,77 +58,19 @@
             color: #00ff99;
         }
 
-        /* 隱藏預設文字 */
         input[type="text"]::placeholder {
-            color: transparent;
-            visibility: hidden;
-        }
-
-        /* 粒子特效 */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: #00ff99;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: particle-animation 1s infinite ease-in-out;
-        }
-
-        @keyframes particle-animation {
-            0% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-
-            100% {
-                transform: scale(0);
-                opacity: 0;
-            }
+            color: #aaa;
+            visibility: visible;
         }
     </style>
 </head>
 
 <body>
-
     <div class="input-container">
-        <input type="text" id="techInput" placeholder="請輸入資料" oninput="createParticles(event)" required>
-        <label for="techInput">輸入資料</label>
+        <input type="text" id="techInput" placeholder="請輸入資料" onfocus="this.placeholder=''"
+            onblur="this.placeholder='請輸入資料'">
+        <label for="techInput"></label>
     </div>
-
-    <div class="particles" id="particles"></div>
-
-    <script>
-        function createParticles(event) {
-            const inputElement = event.target;
-            const particlesContainer = document.getElementById('particles');
-            const rect = inputElement.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-
-            // Create new particle
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            particle.style.left = `${x}px`;
-            particle.style.top = `${y}px`;
-
-            particlesContainer.appendChild(particle);
-
-            // Remove particle after animation ends
-            setTimeout(() => {
-                particle.remove();
-            }, 1000);
-        }
-    </script>
-
 </body>
 
 </html>

@@ -1163,6 +1163,16 @@ input[type="text"]:focus {
     box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
 }
 
+.input-container label {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 16px;
+    color: #aaa;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
 input[type="text"]:focus+.input-container label,
 input[type="text"]:valid+.input-container label {
     top: -10px;
@@ -1171,10 +1181,9 @@ input[type="text"]:valid+.input-container label {
     color: #00ff99;
 }
 
-/* 隱藏預設文字 */
 input[type="text"]::placeholder {
-    color: transparent;
-    visibility: hidden;
+    color: #aaa;
+    visibility: visible;
 }
 
 /* 瀏覽次數 */
