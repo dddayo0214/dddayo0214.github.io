@@ -370,8 +370,9 @@
             <div id="user-info" style="display: none;">
                 <p>歡迎，<span id="user-name"></span>！</p>
             </div>
-            <div id="input-area">
-                <textarea id="note-input" placeholder="輸入留言後按 Enter"></textarea>
+            <div class="input-container" id="input-area">
+                <input type="text" id="tech-input" placeholder="輸入留言後按 Enter" oninput="createParticles(event)" required>
+                <label for="techInput">輸入資料</label>
             </div>
             <div id="note-container"></div>
         </div>
@@ -433,7 +434,7 @@
     const logoutBtn = document.getElementById("logout-btn");
     const inputArea = document.getElementById("input-area");
     const noteContainer = document.getElementById("note-container");
-    const noteInput = document.getElementById("note-input");
+    const noteInput = document.getElementById("tech-input");
     let userTimes;
 
     auth.onAuthStateChanged(user => { updateUI(user); });
@@ -478,11 +479,12 @@
         // ✅ 只有留言作者才能刪除
         const deleteBtn = document.createElement("button");
         deleteBtn.innerText = "刪除";
-        deleteBtn.style.backgroundColor = "red";
+        deleteBtn.style.backgroundColor = "rgba(183, 5, 5, 0.638)";
         deleteBtn.style.color = "white";
         deleteBtn.style.border = "none";
         deleteBtn.style.padding = "5px";
         deleteBtn.style.cursor = "pointer";
+        deleteBtn.style.marginTop = "40px";
         deleteBtn.addEventListener("click", () => {
             if (user && user.uid === userId) {
                 if (confirm("確定要刪除這則留言嗎？")) {
