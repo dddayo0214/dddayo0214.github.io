@@ -11,7 +11,7 @@ body {
     background: #0f172a;
     color: white;
     overflow-x: hidden;
-    height: 100%;
+    min-height: 100vh auto;
     /* cursor: none; */
 }
 
@@ -28,6 +28,12 @@ canvas {
 
 canvas.not-visible {
     display: none;
+}
+
+section {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 100vh auto;
 }
 
 .btn,
@@ -550,16 +556,10 @@ nav {
 
 /* 作品集區塊 */
 .projects {
-    position: relative;
-    /* display: flex; */
-    height: 100vh;
-    padding: 5rem 2rem;
-    max-width: 1200px;
-    margin: 50px auto;
-    justify-content: center;
+    padding: 8rem 2rem;
+    min-height: 100vh;
     text-align: center;
     align-items: center;
-    top: 20vh;
 }
 
 .projects h2 {
@@ -1075,6 +1075,10 @@ nav {
 }
 
 /* 留言 */
+.comment {
+    padding: 8rem 2rem;
+}
+
 .comment-container {
     height: 100vh;
     overflow: hidden;
