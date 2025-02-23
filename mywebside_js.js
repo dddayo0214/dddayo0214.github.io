@@ -171,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ribbon = document.getElementById('ribbon');
     const resetHint = document.getElementById('resetHint');
     const setHint = document.getElementById('setHint');
-    const commentHint = document.getElementById('commentHint');
     let isLidDropped = false;
     let isDragging = false;
     let initialX = 0, initialY = 0;
