@@ -1142,13 +1142,15 @@ nav {
 
 textarea {
     width: 100%;
-    height: 60px;
-    padding: 5px;
-    font-size: 14px;
-    resize: none;
-    border-style: outset;
-    border-radius: 2px;
-    border-width: 1px;
+    padding: 12px 20px;
+    background-color: #2a2a2a;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 /* 瀏覽次數 */
