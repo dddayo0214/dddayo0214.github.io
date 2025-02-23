@@ -1096,6 +1096,15 @@ nav {
     flex-wrap: wrap;
     padding: 10px;
     position: relative;
+    border-style: outset;
+    border-radius: 5px;
+    border-color: #004170;
+}
+
+.note-container2 {
+    width: 78vw;
+    height: 100%;
+    overflow: hidden;
 }
 
 .note {

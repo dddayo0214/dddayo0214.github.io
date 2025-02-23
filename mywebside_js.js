@@ -712,29 +712,3 @@ const el = document.querySelector('.counter')
 const el2 = document.querySelector('.userCounter')
 IO.observe(el)
 IO.observe(el2)
-
-// GA
-// window.dataLayer = window.dataLayer || [];
-// function gtag() { dataLayer.push(arguments); }
-// gtag('js', new Date());
-
-// gtag('config', 'G-YB0RS7N314');
-
-// async function getVisitorCount() {
-//     const response = await fetch('https://analyticsdata.googleapis.com/v1beta/properties/PROPERTY_ID:runReport', {
-//         method: 'POST',
-//         headers: {
-//             'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//             "dateRanges": [{ "startDate": "2024-01-01", "endDate": "today" }],
-//             "metrics": [{ "name": "activeUsers" }]
-//         })
-//     });
-//     const data = await response.json();
-//     document.getElementById('visitor-count').innerText = data.rows?.[0]?.metricValues?.[0]?.value || '無法取得資料';
-// }
-
-// 呼叫 API 以取得瀏覽人數
-// getVisitorCount().catch(console.error);
