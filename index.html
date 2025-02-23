@@ -476,7 +476,6 @@
         note.appendChild(timeLabel);
 
         // ✅ 只有留言作者才能刪除
-
         const deleteBtn = document.createElement("button");
         deleteBtn.innerText = "刪除";
         deleteBtn.style.backgroundColor = "red";
@@ -518,20 +517,17 @@
                             alert("你已經達到 5 則便條紙的上限，請先刪除舊的再新增！");
                             return;
                         }
-
-
+                        db.collection("notes").add({
+                            text: noteInput.value,
+                            timestamp,
+                            userId: user.uid,  // ✅ 記錄使用者的 UID
+                            displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
+                        });
+                        noteInput.value = "";
                     })
                     .catch((error) => {
                         console.error("獲取便條紙數量時出錯:", error);
                     });
-
-                db.collection("notes").add({
-                    text: noteInput.value,
-                    timestamp,
-                    userId: user.uid,  // ✅ 記錄使用者的 UID
-                    displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
-                });
-                noteInput.value = "";
 
                 // 限制字數
                 if (text.length > 200) {
