@@ -1098,17 +1098,16 @@ nav {
     overflow: auto;
     display: flex;
     flex-wrap: wrap;
-    padding: 10px;
     position: relative;
-    border-style: outset;
-    border-radius: 5px;
-    border-color: #004170;
-}
-
-.note-container2 {
-    width: 77vw;
-    height: 100%;
-    overflow: hidden;
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid #0ff;
+    box-shadow: 0 0 20px #0ff;
+    padding: 20px;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    scrollbar-width: none;
 }
 
 .note {
@@ -1140,8 +1139,9 @@ nav {
 
 /* 瀏覽次數 */
 .visitnumber {
-    max-width: 1200px;
     margin: 300px auto;
+    align-items: center;
+    text-align: center;
 }
 
 .visitnumber h1 {
@@ -1351,6 +1351,10 @@ input[type="text"]::placeholder {
     }
 
     .nav-aside ul {
+        display: none;
+    }
+
+    #changeAnimation-btn {
         display: none;
     }
 }
