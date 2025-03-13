@@ -402,7 +402,7 @@ function moveIndicator(element) {
 // 平滑滾動
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         const targetId = link.getAttribute('href');
         const targetSection = document.querySelector(targetId);
 
@@ -419,7 +419,7 @@ navLinks.forEach(link => {
 
 navLinksAside.forEach(link => {
     link.addEventListener('click', (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         const targetId = link.getAttribute('href');
         const targetSection = document.querySelector(targetId);
 
