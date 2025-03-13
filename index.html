@@ -106,10 +106,9 @@
                 <a href="#home" class="active">首頁</a>
                 <a href="#about">關於</a>
                 <a href="#timeline">歷程</a>
-                <a href="/project.html">作品</a>
+                <a href="project.html">作品</a>
                 <a href="#contact">聯絡</a>
-                <a href="/comment.html">留言</a>
-                <a href="https://www.google.com">前往 Google</a>
+                <a href="#comment">留言</a>
                 <div class="nav-indicator"></div>
             </div>
         </div>
@@ -307,6 +306,33 @@
         </div>
     </section>
 
+    <section class="projects" id="projects">
+        <h2>作品集</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <img src="merterial/敬請期待.png" alt="專案一">
+                <div class="project-info">
+                    <h3>專案一</h3>
+                    <p>這是一個很棒的專案描述</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="merterial/敬請期待.png" alt="專案二">
+                <div class="project-info">
+                    <h3>專案二</h3>
+                    <p>另一個精彩的專案描述</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="merterial/敬請期待.png" alt="專案三">
+                <div class="project-info">
+                    <h3>專案三</h3>
+                    <p>第三個令人驚嘆的專案</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="contact" id="contact">
         <h2>聯絡我</h2>
         <p>歡迎與我聯繫!</p>
@@ -337,6 +363,21 @@
     </section>
 
     <section class="comment" id="comment">
+        <div class="comment-container">
+            <div id="auth-container">
+                <button class="btn" id="login-btn">使用 Google 登入留言!</button>
+                <button class="btn" id="logout-btn" style="display: none;">登出</button>
+            </div>
+            <div id="user-info" style="display: none;">
+                <p>歡迎，<span id="user-name"></span>！</p>
+            </div>
+            <div class="input-container" id="input-area">
+                <input type="text" id="tech-input" placeholder="請輸入資料" onfocus="this.placeholder=''"
+                    onblur="this.placeholder='請輸入資料'">
+                <label for="tech-input"></label>
+            </div>
+            <div id="note-container"></div>
+        </div>
         <div class="floor"></div>
         <div class="gift-container">
             <div>
