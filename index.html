@@ -74,9 +74,7 @@
             <a href="#home" class="active btn">首頁</a>
             <a href="#about" class="btn">關於</a>
             <a href="#timeline" class="btn">歷程</a>
-            <a href="#projects" class="btn">作品</a>
             <a href="#contact" class="btn">聯絡</a>
-            <a href="#comment" class="btn">留言</a>
             <button class="btn" id="changeAnimation-btn" onclick="editAnimation()">改變背景動畫</button>
             <ul>
                 <div class="input-group not-visible" id="math-input">
@@ -103,12 +101,10 @@
                 <div class="logo">Tsai alan的歡樂小屋</div>
             </div>
             <div class="nav-links">
-                <a href="#home" class="active">首頁</a>
-                <a href="#about">關於</a>
-                <a href="#timeline">歷程</a>
-                <a href="#projects">作品</a>
-                <a href="#contact">聯絡</a>
-                <a href="#comment">留言</a>
+                <a href="index.html" class="active">首頁</a>
+                <a href="project.html">作品</a>
+                <a href="comment.html">留言</a>
+                <a href="code.html">部落格</a>
                 <div class="nav-indicator"></div>
             </div>
         </div>
@@ -306,33 +302,6 @@
         </div>
     </section>
 
-    <section class="projects" id="projects">
-        <h2>作品集</h2>
-        <div class="project-grid">
-            <div class="project-card">
-                <img src="merterial/敬請期待.png" alt="專案一">
-                <div class="project-info">
-                    <h3>專案一</h3>
-                    <p>這是一個很棒的專案描述</p>
-                </div>
-            </div>
-            <div class="project-card">
-                <img src="merterial/敬請期待.png" alt="專案二">
-                <div class="project-info">
-                    <h3>專案二</h3>
-                    <p>另一個精彩的專案描述</p>
-                </div>
-            </div>
-            <div class="project-card">
-                <img src="merterial/敬請期待.png" alt="專案三">
-                <div class="project-info">
-                    <h3>專案三</h3>
-                    <p>第三個令人驚嘆的專案</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="contact" id="contact">
         <h2>聯絡我</h2>
         <p>歡迎與我聯繫!</p>
@@ -363,21 +332,6 @@
     </section>
 
     <section class="comment" id="comment">
-        <div class="comment-container">
-            <div id="auth-container">
-                <button class="btn" id="login-btn">使用 Google 登入留言!</button>
-                <button class="btn" id="logout-btn" style="display: none;">登出</button>
-            </div>
-            <div id="user-info" style="display: none;">
-                <p>歡迎，<span id="user-name"></span>！</p>
-            </div>
-            <div class="input-container" id="input-area">
-                <input type="text" id="tech-input" placeholder="請輸入資料" onfocus="this.placeholder=''"
-                    onblur="this.placeholder='請輸入資料'">
-                <label for="tech-input"></label>
-            </div>
-            <div id="note-container"></div>
-        </div>
         <div class="floor"></div>
         <div class="gift-container">
             <div>
@@ -429,184 +383,6 @@
     count++;
     localStorage.setItem('page_views', count);
     document.getElementById('userVisitor-count').innerText = count;
-
-    // 留言板功能
-    const loginBtn = document.getElementById("login-btn");
-    const logoutBtn = document.getElementById("logout-btn");
-    const inputArea = document.getElementById("input-area");
-    const noteContainer = document.getElementById("note-container");
-    const noteInput = document.getElementById("tech-input");
-    let userTimes;
-
-    auth.onAuthStateChanged(user => { updateUI(user); });
-
-    loginBtn.addEventListener("click", () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider);
-    });
-
-    function createNote(text, timestamp, noteId, userId, displayName) {
-        if (!text.trim()) return;
-
-        const user = auth.currentUser;
-        const note = document.createElement("div");
-        note.dataset.id = noteId;
-        note.classList.add("note");
-        note.dataset.timestamp = timestamp;
-
-        // 顯示使用者名稱
-        const userLabel = document.createElement("div");
-        userLabel.classList.add("user-label");
-        userLabel.innerText = `✏️ ${displayName}`; // 顯示發送者名稱
-        userLabel.style.fontSize = "12px";
-        userLabel.style.fontWeight = "bold";
-        userLabel.style.color = "#333";
-        userLabel.style.marginBottom = "5px";
-
-        // 內容
-        const content = document.createElement("div");
-        content.classList.add("content");
-        content.innerText = text;
-
-        // 時間戳記
-        const timeLabel = document.createElement("div");
-        timeLabel.classList.add("timestamp");
-        timeLabel.innerText = timestamp;
-
-        note.appendChild(userLabel); // 加入使用者名稱
-        note.appendChild(content);
-        note.appendChild(timeLabel);
-
-        // ✅ 只有留言作者才能刪除
-        const deleteBtn = document.createElement("button");
-        deleteBtn.innerText = "刪除";
-        deleteBtn.style.backgroundColor = "rgba(183, 5, 5, 0.638)";
-        deleteBtn.style.color = "white";
-        deleteBtn.style.border = "none";
-        deleteBtn.style.padding = "5px";
-        deleteBtn.style.cursor = "pointer";
-        deleteBtn.style.marginTop = "40px";
-        deleteBtn.addEventListener("click", () => {
-            if (user && user.uid === userId) {
-                if (confirm("確定要刪除這則留言嗎？")) {
-                    db.collection("notes").doc(noteId).delete().then(() => {
-                        console.log("留言已刪除");
-                    }).catch((error) => {
-                        console.error("刪除失敗:", error);
-                    });
-                }
-            }
-            else {
-                alert("只有留言作者才能刪除留言！");
-            }
-
-        }); note.appendChild(deleteBtn);
-        noteContainer.appendChild(note);
-    }
-
-    noteInput.addEventListener("keydown", function (e) {
-        const timestamp = new Date().toISOString();  // 改用 ISO 格式
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            const user = auth.currentUser;
-            if (user) {
-                let text = noteInput.value.trim();
-                // 🔥 限制便條紙數量（例如：最多 5 張）
-                const userNotes = db.collection("notes")
-                    .where("userId", "==", user.uid)
-                    .get()
-                    .then((userNotes) => {
-                        if (userNotes.size >= 5) {
-                            alert("你已經達到 5 則便條紙的上限，請先刪除舊的再新增！");
-                            return;
-                        }
-                        db.collection("notes").add({
-                            text: noteInput.value,
-                            timestamp,
-                            userId: user.uid,  // ✅ 記錄使用者的 UID
-                            displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
-                        });
-                        noteInput.value = "";
-                    })
-                    .catch((error) => {
-                        console.error("獲取便條紙數量時出錯:", error);
-                    });
-
-                // 限制字數
-                if (text.length > 200) {
-                    alert("留言最多 200 字！");
-                    return;
-                }
-
-                // 過濾爆言
-                const bannedWords = ["髒話1", "髒話2", "禁詞"];
-                for (let word of bannedWords) {
-                    if (text.includes(word)) {
-                        alert("留言包含禁用詞彙！");
-                        return;
-                    }
-                }
-            }
-        }
-    });
-
-    db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
-        snapshot.docChanges().forEach(change => {
-            if (change.type === "added") {
-                const doc = change.doc;
-                createNote(
-                    doc.data().text,
-                    doc.data().timestamp,
-                    doc.id,
-                    doc.data().userId,
-                    doc.data().displayName || "匿名用戶"
-                );
-            } else if (change.type === "removed") {
-                const note = document.querySelector(`[data-id="${change.doc.id}"]`);
-                if (note) {
-                    note.remove();
-                }
-            }
-        });
-    });
-
-    logoutBtn.addEventListener("click", () => {
-        auth.signOut().then(() => {
-            alert("已成功登出！");
-            updateUI(null); // 確保 UI 也同步更新
-        }).catch((error) => {
-            console.error("登出失敗:", error);
-            alert("登出失敗，請稍後再試！");
-        });
-    });
-
-    function updateUI(user) {
-        const userInfo = document.getElementById("user-info");
-        const userNameSpan = document.getElementById("user-name");
-
-        if (user) {
-            loginBtn.style.display = "none";
-            logoutBtn.style.display = "block";
-            inputArea.style.display = "block";
-
-            // 顯示使用者名稱
-            userInfo.style.display = "block";
-            userNameSpan.textContent = user.displayName || "訪客"; // 如果沒有名稱，顯示「訪客」
-        } else {
-            loginBtn.style.display = "block";
-            logoutBtn.style.display = "none";
-            inputArea.style.display = "none";
-
-            // 隱藏使用者資訊
-            userInfo.style.display = "none";
-        }
-    }
-
-    // 當登入狀態改變時更新 UI
-    auth.onAuthStateChanged(user => {
-        updateUI(user);
-    });
-
 </script>
 
 </html>

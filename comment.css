@@ -1077,15 +1077,14 @@ nav {
 /* 留言 */
 .comment {
     padding: 8rem 2rem;
+    height: 100vh;
 }
 
 .comment-container {
-    height: 100vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
 #auth-container {
@@ -1094,7 +1093,7 @@ nav {
 
 #note-container {
     width: 80vw;
-    height: 20vh;
+    height: 80vh;
     overflow: auto;
     display: flex;
     flex-wrap: wrap;
@@ -1106,12 +1105,14 @@ nav {
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
     scrollbar-width: none;
 }
 
 .note {
     width: 180px;
+    height: 180px;
     min-height: 100px;
     background: #4e7aad;
     padding: 10px;
@@ -1128,50 +1129,6 @@ nav {
     border-style: outset;
     border-width: 5px;
     border-color: #004170;
-}
-
-.timestamp {
-    font-size: 10px;
-    color: rgb(255, 255, 255);
-    text-align: right;
-    margin-top: 5px;
-}
-
-/* 瀏覽次數 */
-.visitnumber {
-    margin: 300px auto;
-    align-items: center;
-    text-align: center;
-}
-
-.visitnumber h1 {
-    font-family: 'Rampart One', cursive;
-    font-size: 10em;
-}
-
-.counter {
-    font-family: 'Rampart One', cursive;
-    font-size: 5em;
-    margin: 100vh auto 40vh;
-}
-
-.counter:not(.is-visible) {
-    visibility: hidden;
-}
-
-.userCounter {
-    font-family: 'Rampart One', cursive;
-    font-size: 5em;
-    margin: 100vh auto 40vh;
-}
-
-.userCounter:not(.is-visible) {
-    visibility: hidden;
-}
-
-#user-info {
-    font-family: 'Rampart One', cursive;
-    font-size: 3em;
 }
 
 /* 輸入框 */
@@ -1312,10 +1269,6 @@ input[type="text"]::placeholder {
         align-items: center;
     }
 
-    /* .nav-links {
-        display: none;
-    } */
-
     .hero h1 {
         font-size: 2.5rem;
     }
@@ -1350,19 +1303,6 @@ input[type="text"]::placeholder {
         left: -67px;
         right: auto;
     }
-
-    /* .nav-indicator {
-        display: none;
-    } */
-
-    /* .nav-links a.active {
-        background: rgba(96, 165, 250, 0.1);
-        border-radius: 0.5rem;
-    } */
-
-    /* .nav-aside ul {
-        display: none;
-    } */
 
     #changeAnimation-btn {
         display: none;

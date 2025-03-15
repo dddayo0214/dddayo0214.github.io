@@ -195,16 +195,6 @@ function initIndicator() {
     }
 }
 
-const mathInput = document.getElementById('math-input');
-
-function editAnimation() {
-    if (mathInput.classList.contains('not-visible')) {
-        mathInput.classList.remove('not-visible');
-    } else {
-        mathInput.classList.add('not-visible');
-    }
-}
-
 // 移動導航指示器
 function moveIndicator(element) {
     const rect = element.getBoundingClientRect();
@@ -213,24 +203,6 @@ function moveIndicator(element) {
     indicator.style.width = `${rect.width}px`;
     indicator.style.left = `${rect.left - parentRect.left}px`;
 }
-
-// 平滑滾動
-navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        // e.preventDefault();
-        const targetId = link.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
-
-        targetSection.scrollIntoView({
-            behavior: 'smooth'
-        });
-
-        // 更新活動狀態和移動指示器
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        moveIndicator(link);
-    });
-});
 
 navLinksAside.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -280,78 +252,6 @@ window.addEventListener('scroll', () => {
 // 初始化
 window.addEventListener('load', initIndicator);
 window.addEventListener('resize', initIndicator);
-
-function toggleDescription(tool) {
-    const description = document.getElementById(`${tool}-description`);
-    const allDescriptions = document.querySelectorAll('.tool-description');
-
-    allDescriptions.forEach(desc => {
-        if (desc.id !== `${tool}-description`) {
-            desc.classList.remove('active');
-        }
-    });
-
-    description.classList.toggle('active');
-
-    let start = null;
-    const duration = 1000; // 動畫持續時間 (毫秒)
-
-    function scaleIn(timestamp) {
-        if (!start) start = timestamp;
-        const elapsed = timestamp - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const scale = 0.95 + 0.05 * progress;
-        description.style.transform = `scale(${scale})`;
-
-        if (progress < 1) {
-            requestAnimationFrame(scaleIn);
-        }
-    }
-    requestAnimationFrame(scaleIn);
-}
-
-function toggleAchievements(achievement) {
-    const overlay = document.getElementById(achievement);
-    if (!overlay) return;
-
-    const closeBtn = overlay.querySelector('.close-btn');
-
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-
-    const fullImage = overlay.querySelector('.fullImage');
-    if (fullImage) {
-        fullImage.onclick = function (e) {
-            e.stopPropagation();
-        };
-    }
-
-    const handleClose = function () {
-        overlay.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    };
-
-    overlay.onclick = function (e) {
-        if (e.target === overlay || e.target === closeBtn) {
-            handleClose();
-        }
-    };
-
-    const escHandler = function (e) {
-        if (e.key === 'Escape' && overlay.style.display === 'flex') {
-            handleClose();
-            document.removeEventListener('keydown', escHandler);
-        }
-    };
-
-    document.addEventListener('keydown', escHandler);
-}
-
-window.addEventListener('load', function () {
-    setTimeout(function () {
-        window.scrollTo(0, 1);
-    }, 0);
-});
 
 // 數學公式動畫
 const canvas = document.getElementById("canvas");
@@ -497,32 +397,3 @@ function createParticles(event) {
         particle.remove();
     }, 1000);
 }
-
-//計數器動畫
-const counterUp = window.counterUp.default
-
-const callback = entries => {
-    entries.forEach(entry => {
-        const el = entry.target;
-        const el2 = entry.target;
-        if (entry.isIntersecting && !el.classList.contains('is-visible')) {
-            counterUp(el, {
-                duration: 2000,
-                delay: 16,
-            })
-            counterUp(el2, {
-                duration: 2000,
-                delay: 16,
-            })
-            el.classList.add('is-visible');
-            el2.classList.add('is-visible');
-        }
-    })
-}
-
-const IO = new IntersectionObserver(callback, { threshold: 1 })
-
-const el = document.querySelector('.counter')
-const el2 = document.querySelector('.userCounter')
-IO.observe(el)
-IO.observe(el2)
