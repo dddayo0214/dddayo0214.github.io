@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="alan_tsai的小屋">
+    <meta property="og:description" content="我是弱弱的寫程式新手，歡迎來這裡留下你的留言！">
+    <meta property="og:image" content="https://i.imgur.com/reW9Wxp.png">
+    <meta property="og:url" content="https://vercel.com/dds-projects-0a3234a7/dddayo0214-github-io">
+    <meta property="og:type" content="website">
+    <link rel="shortcut icon" href="merterial/apex-logo.ico" type="image/x-icon">
+    <title>Tsai alan的小屋</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://unpkg.com/counterup2@2.0.2/dist/index.js">	</script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <link rel="stylesheet" href="mywebside_css.css">
+    <link rel="stylesheet" href="project.css">
+    <script src="project.js" defer></script>
+
+</head>
+
+<body>
+    <div class="custom-cursor" id="bodytop">
+        <img class="rotationAnime" src="merterial/rocket.png" alt="custom cursor" id="bodytop_">
+    </div>
+    <div class="custom-cursorFollower">
+        <img class="rotationAnime" src="merterial/comet.png" alt="custom cursorFollower">
+    </div>
+    <div class="scroll-progress"></div>
+
+    <canvas id="canvas"></canvas>
+
+    <div>
+        <div class="image-overlay" id="學科能力競賽">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/市賽資訊佳作.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="多益">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/toeic715.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="ncku邀請賽">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/ncku邀請賽.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="英檢中級">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/英檢中級.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="動物育望">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/動物育望.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="獎牌">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/獎牌.jpg" alt="完整大圖">
+        </div>
+    </div>
+
+    <input type="checkbox" name="" id="sideMenu-active">
+
+    <!-- <div class="sideMenu">
+        <div class="nav-aside">
+            <a href="#home" class="active btn">首頁</a>
+            <a href="#about" class="btn">關於</a>
+            <a href="#timeline" class="btn">歷程</a>
+            <a href="#projects" class="btn">作品</a>
+            <a href="#contact" class="btn">聯絡</a>
+            <a href="#comment" class="btn">留言</a>
+            <button class="btn" id="changeAnimation-btn" onclick="editAnimation()">改變背景動畫</button>
+            <ul>
+                <div class="input-group not-visible" id="math-input">
+                    <label>σ: <input type="number" id="sigma" value="10" step="0.1"></label>
+                    <label>ρ: <input type="number" id="rho" value="28" step="0.1"></label>
+                    <label>β: <input type="number" id="beta" value="2.67" step="0.01"></label>
+                    <button class="btn" id="math-reset" onclick="resetValues()">ResetValues</button>
+                    <button class="btn" id="effect-close" onclick="closeEffect()">StopEffects</button>
+                    <button class="btn" id="effect-start" onclick="startEffect()">StartEffects</button>
+                </div>
+            </ul>
+        </div>
+        <label class="nav-aside-label" for="sideMenu-active">
+            <i class="fas fa-angle-right"></i>
+        </label>
+    </div> -->
+
+    <nav>
+        <div class="nav-content" id="nav-content">
+            <div class="nav-wight">
+                <div class="nav-logo">
+                    <!-- <img src="merterial/hinano.png" alt="logo"> -->
+                </div>
+                <div class="logo">Tsai alan的歡樂小屋</div>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">首頁</a>
+                <a href="project.html" class="active">作品</a>
+                <a href="comment.html">留言</a>
+                <a href="code.html">部落格</a>
+                <div class="nav-indicator"></div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="projects" id="projects">
+        <h2>作品集</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <img src="merterial/敬請期待.png" alt="專案一">
+                <div class="project-info">
+                    <h3>專案一</h3>
+                    <p>這是一個很棒的專案描述</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="merterial/敬請期待.png" alt="專案二">
+                <div class="project-info">
+                    <h3>專案二</h3>
+                    <p>另一個精彩的專案描述</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="merterial/敬請期待.png" alt="專案三">
+                <div class="project-info">
+                    <h3>專案三</h3>
+                    <p>第三個令人驚嘆的專案</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="footer">Copyright &copy Tsai alan</div>
+
+</body>
+
+</html>

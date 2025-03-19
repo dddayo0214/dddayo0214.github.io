@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap');
+
+#notesContainer {
+    /* height: 100vh; */
+    width: 70%;
+    margin: 20px auto;
+}
+
+.notes {
+    padding: 8rem 2rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.notes-container {
+    height: 100vh;
+    margin: auto;
+}
+
+.tool-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.tool-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tool-card:active::after {
+    opacity: 1;
+    transition: opacity 0.1s;
+}
+
+.tool-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tool-icon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-card:hover .tool-icon {
+    transform: rotate(20deg);
+}
+
+.apex-icon {
+    width: 64px;
+    height: 64px;
+    background: url('merterial/apex-logo.png') no-repeat center/contain;
+    filter: grayscale(100%) drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s, filter 0.3s;
+    cursor: pointer;
+}
+
+.tool-title {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.tool-card:hover .tool-title {
+    color: #3498db;
+}
+
+.tool-description {
+    color: #666;
+    line-height: 1.6;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-description.active {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.tool-description ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.tool-description li {
+    margin: 8px 0;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease-out;
+}
+
+.tool-description.active li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.tool-card a {
+    pointer-events: auto;
+    display: inline-block;
+    z-index: 10;
+    font-weight: 900;
+}
+
+/* 輸入框 */
+input[type="text"] {
+    width: 50%;
+    padding: 12px 20px;
+    background-color: #2a2a2a;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+input[type="text"]:focus {
+    border-color: #00ff99;
+    box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+}
+
+.input-container label {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 16px;
+    color: #aaa;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+input[type="text"]:focus+.input-container label,
+input[type="text"]:valid+.input-container label {
+    top: -10px;
+    left: 20px;
+    font-size: 12px;
+    color: #00ff99;
+}
+
+input[type="text"]::placeholder {
+    color: #aaa;
+    visibility: visible;
+}
+
+.note {
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #222;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: 0.3s ease-in-out;
+}
+
+.note:hover {
+    box-shadow: 0 4px 20px rgba(0, 204, 255, 0.4);
+}
+
+.note h3 {
+    background-color: #00c6ff;
+    color: #fff;
+    padding: 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 18px;
+}
+
+.content {
+    display: none;
+    background-color: #333;
+    color: #bbb;
+    padding: 15px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.content.show {
+    display: block;
+}
+
+/* 動畫 */
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(1000px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeInRight {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .tool-card a {
+        font-size: clamp(14px, 2rem, 22px);
+    }
+
+    .tool-description ul {
+        display: none;
+    }
+}

@@ -1,3 +1,21 @@
+const searchBox = document.getElementById("searchBox");
+const notesContainer = document.getElementById("notesContainer");
+
+// 搜尋功能
+searchBox.addEventListener("input", function () {
+    const query = searchBox.value.toLowerCase();
+    const tools = document.querySelectorAll(".tool-card");
+
+    tools.forEach(tool => {
+        const title = tool.querySelector(".tool-title").textContent.toLowerCase();
+        if (title.includes(query)) {
+            tool.style.display = "block";
+        } else {
+            tool.style.display = "none";
+        }
+    });
+});
+
 // 滑鼠跟隨效果
 const cursor = document.querySelector('.custom-cursor');
 const cursorFollower = document.querySelector('.custom-cursorFollower');
@@ -164,191 +182,6 @@ document.addEventListener('mouseleave', () => {
     cursorFollower.style.opacity = 0;
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const boxLid = document.getElementById('boxLid');
-    const giftText = document.getElementById('giftText');
-    const giftBox = document.getElementById('boxBase');
-    const ribbon = document.getElementById('ribbon');
-    const resetHint = document.getElementById('resetHint');
-    const setHint = document.getElementById('setHint');
-    let isLidDropped = false;
-    let isDragging = false;
-    let initialX = 0, initialY = 0;
-    let xOffset = 0;
-    let yOffset = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let firstDrog = false;
-
-    giftBox.addEventListener('click', () => {
-        if (!isLidDropped && !isDragging) {
-            ribbon.classList.add('untied');
-            setTimeout(() => {
-                boxLid.style.transform = '';
-                boxLid.classList.remove('dropped');
-                void boxLid.offsetWidth;
-                boxLid.classList.add('dropped');
-                createConfetti();
-                giftText.style.opacity = '1';
-                resetHint.classList.add('visible');
-                setHint.classList.remove('visible');
-                resetdropLid();
-                requestAnimationFrame(dropLid);
-            }, 500);
-            isLidDropped = true;
-            document.getElementById('bg-music').play();
-        }
-    });
-
-    boxLid.addEventListener('mousedown', startDragging);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', stopDragging);
-
-    boxLid.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        startDragging(e.touches[0]);
-    });
-    document.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        drag(e.touches[0]);
-    });
-    document.addEventListener('touchend', stopDragging);
-
-    function startDragging(e) {
-        if (!isLidDropped) return;
-        isDragging = true;
-        boxLid.classList.add('dragging');
-        boxLid.classList.remove('dropped');
-
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-
-        // 保存當前位置
-        // const rect = boxLid.getBoundingClientRect();
-        // currentTransform = window.getComputedStyle(boxLid).transform;
-        // if (currentTransform !== 'none') {
-        //     boxLid.style.transform = currentTransform;
-        // }
-    }
-
-    function drag(e) {
-        if (!isDragging) return;
-        console.log(firstDrog);
-        if (!firstDrog) {
-            currentX = e.clientX - initialX + 150;
-            currentY = e.clientY - initialY + 100;
-        }
-        else {
-            currentX = e.clientX - initialX;
-            currentY = e.clientY - initialY;
-        }
-        xOffset = currentX;
-        yOffset = currentY;
-
-        boxLid.style.transform = `translate(${currentX}px, ${currentY}px)`;
-
-        if (Math.abs(currentX) < 50 && Math.abs(currentY) < 50) {
-            resetHint.style.color = '#4CAF50';
-        } else {
-            resetHint.style.color = 'white';
-        }
-    }
-
-    function stopDragging() {
-        if (!isDragging) return;
-        isDragging = false;
-        firstDrog = true;
-        boxLid.classList.remove('dragging');
-
-        initialX = currentX;
-        initialY = currentY;
-
-        const boxLidtransform = new DOMMatrix(getComputedStyle(boxLid).transform);
-        const x = boxLidtransform.m41;
-        const y = boxLidtransform.m42;
-
-        if (Math.abs(x) < 50 && Math.abs(y) < 50) {
-            document.getElementById('bg-music').pause();
-            resetGiftBox();
-        }
-    }
-
-    function dropLid(timestamp) {
-
-        if (!startTime) startTime = timestamp; // 記錄動畫開始時間
-
-        const elapsedTime = timestamp - startTime; // 計算已經過的時間
-
-        // 以進度計算當前的 X, Y 和旋轉角度
-        const progress = Math.min(elapsedTime / duration, 1); // 進度值在 0 到 1 之間
-
-        const currentX = startX + (endX - startX) * progress;
-        const currentY = startY + (endY - startY) * progress;
-        const currentRotation = startRotation + (endRotation - startRotation) * progress;
-
-        // 設置 transform 屬性
-        boxLid.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${currentRotation}deg)`;
-
-        // 如果動畫還沒完成，繼續請求下一幀
-        if (elapsedTime < duration) {
-            requestAnimationFrame(dropLid); // 繼續動畫
-        }
-    }
-
-    function resetdropLid() {
-        firstDrog = false;
-        startTime = null;
-    }
-
-    function resetGiftBox() {
-        // 移除所有transform和動畫相關的樣式
-        boxLid.style.transform = '';
-        boxLid.style.animation = '';
-        boxLid.classList.remove('dropped');
-        ribbon.classList.remove('untied');
-        giftText.style.opacity = '0';
-        isLidDropped = false;
-        resetHint.classList.remove('visible');
-        setHint.classList.add('visible');
-
-        // 強制重繪
-        void boxLid.offsetWidth;
-        // location.reload();
-    }
-
-    function createConfetti() {
-        document.querySelectorAll('.confetti').forEach(el => el.remove());
-
-        const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
-
-        for (let i = 0; i < 50; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-
-            confetti.style.left = `${Math.random() * window.innerWidth}px`;
-            confetti.style.top = `${Math.random() * window.innerHeight / 2}px`;
-
-            const size = Math.floor(Math.random() * 10) + 5;
-            confetti.style.width = `${size}px`;
-            confetti.style.height = `${size}px`;
-
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-
-            document.body.appendChild(confetti);
-
-            setTimeout(() => {
-                confetti.classList.add('active-confetti');
-            }, 10);
-
-            setTimeout(() => {
-                confetti.remove();
-            }, 2000);
-        }
-    }
-});
-
 // 添加時間軸動畫
 const timelineItems = document.querySelectorAll('.timeline-item');
 
@@ -398,30 +231,6 @@ function moveIndicator(element) {
     indicator.style.width = `${rect.width}px`;
     indicator.style.left = `${rect.left - parentRect.left}px`;
 }
-
-// 平滑滾動
-// navLinks.forEach(link => {
-//     link.addEventListener('click', (e) => {
-//         e.preventDefault();
-//         const targetId = link.getAttribute('href');
-//         const targetSection = document.querySelector(targetId);
-
-//         if (targetId) {
-//             setTimeout(() => {
-//                 window.location.href = targetId;
-//             }, 500);
-//         }
-
-//         targetSection.scrollIntoView({
-//             behavior: 'smooth'
-//         });
-
-//         // 更新活動狀態和移動指示器
-//         navLinks.forEach(l => l.classList.remove('active'));
-//         link.classList.add('active');
-//         moveIndicator(link);
-//     });
-// });
 
 navLinksAside.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -506,49 +315,6 @@ function toggleDescription(tool) {
     }
     requestAnimationFrame(scaleIn);
 }
-
-function toggleAchievements(achievement) {
-    const overlay = document.getElementById(achievement);
-    if (!overlay) return;
-
-    const closeBtn = overlay.querySelector('.close-btn');
-
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-
-    const fullImage = overlay.querySelector('.fullImage');
-    if (fullImage) {
-        fullImage.onclick = function (e) {
-            e.stopPropagation();
-        };
-    }
-
-    const handleClose = function () {
-        overlay.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    };
-
-    overlay.onclick = function (e) {
-        if (e.target === overlay || e.target === closeBtn) {
-            handleClose();
-        }
-    };
-
-    const escHandler = function (e) {
-        if (e.key === 'Escape' && overlay.style.display === 'flex') {
-            handleClose();
-            document.removeEventListener('keydown', escHandler);
-        }
-    };
-
-    document.addEventListener('keydown', escHandler);
-}
-
-window.addEventListener('load', function () {
-    setTimeout(function () {
-        window.scrollTo(0, 1);
-    }, 0);
-});
 
 // 數學公式動畫
 const canvas = document.getElementById("canvas");
@@ -672,54 +438,3 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
-
-// 輸入框動畫
-function createParticles(event) {
-    const inputElement = event.target;
-    const particlesContainer = document.getElementById('particles');
-    const rect = inputElement.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    // Create new particle
-    const particle = document.createElement('div');
-    particle.classList.add('particle');
-    particle.style.left = `${x} px`;
-    particle.style.top = `${y} px`;
-
-    particlesContainer.appendChild(particle);
-
-    // Remove particle after animation ends
-    setTimeout(() => {
-        particle.remove();
-    }, 1000);
-}
-
-//計數器動畫
-const counterUp = window.counterUp.default
-
-const callback = entries => {
-    entries.forEach(entry => {
-        const el = entry.target;
-        const el2 = entry.target;
-        if (entry.isIntersecting && !el.classList.contains('is-visible')) {
-            counterUp(el, {
-                duration: 2000,
-                delay: 16,
-            })
-            counterUp(el2, {
-                duration: 2000,
-                delay: 16,
-            })
-            el.classList.add('is-visible');
-            el2.classList.add('is-visible');
-        }
-    })
-}
-
-const IO = new IntersectionObserver(callback, { threshold: 1 })
-
-const el = document.querySelector('.counter')
-const el2 = document.querySelector('.userCounter')
-IO.observe(el)
-IO.observe(el2)

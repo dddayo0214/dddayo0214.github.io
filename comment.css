@@ -1,321 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: white;
-    overflow-x: hidden;
-    animation: fadeIn 1.5s ease-out;
-    /* cursor: none; */
-}
-
-.ctext {
-    --min-size: 12;
-    --max-size: 48;
-    --font-size: calc((var(--min-size) * 1px) + (var(--max-size) - var(--min-size)) * ((100cqw - 320px) / (1920 - 320)));
-    font-size: clamp(var(--min-size) * 1px, var(--font-size), var(--max-size) * 1px);
-}
-
-/* 數學公式動畫 */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: -1;
-}
-
-canvas.not-visible {
-    display: none;
-}
-
-section {
-    overflow-wrap: break-word;
-}
-
-.btn,
-.btn:focus {
-    cursor: pointer;
-    top: 1rem;
-    margin: 20px;
-    position: relative;
-    min-width: 200px;
-    background-color: rgb(0, 92, 129);
-    border-radius: 4em;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition-duration: 0.4s;
-    padding: 10px 20px;
-    z-index: 1;
-    overflow: hidden;
-    border-width: 2px;
-    border-block: 1px;
-    border-style: outset;
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(0, 0, 0, 0.2);
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    transition: all 1s ease;
-}
-
-.btn:active:after {
-    opacity: 1;
-    transition: 0s;
-    box-shadow: 0 0 0 0 white;
-}
-
-.btn:active {
-    top: 1px;
-}
-
-.btn:after {
-    content: "";
-    display: block;
-    position: absolute;
-    height: 0%;
-    left: 50%;
-    top: 50%;
-    width: 150%;
-    z-index: -1;
-    background: #c30d0d;
-    -moz-transform: translateX(-50%) translateY(-50%) rotate(-25deg);
-    -ms-transform: translateX(-50%) translateY(-50%) rotate(-25deg);
-    -webkit-transform: translateX(-50%) translateY(-50%) rotate(-25deg);
-    transform: translateX(-50%) translateY(-50%) rotate(-25deg);
-    -webkit-transition: all 0.75s ease 0s;
-    -moz-transition: all 0.75s ease 0s;
-    -o-transition: all 0.75s ease 0s;
-    transition: all 0.75s ease 0s;
-}
-
-.btn:hover {
-    color: #FFFFFF;
-    text-shadow: none;
-}
-
-.btn:hover:after {
-    height: 450%;
-}
-
-/* 導航欄區塊 */
-nav {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    background: rgba(15, 23, 42, 0.9);
-    padding: 1rem;
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    white-space: nowrap;
-}
-
-.nav-indicator {
-    position: absolute;
-    bottom: 0;
-    height: 3px;
-    background: #60a5fa;
-    transition: all 0.3s ease;
-    border-radius: 3px;
-}
-
-.sideMenu {
-    width: 300px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 50px 0;
-    box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
-    position: fixed;
-    transform: translateX(-100%);
-    transition: 0.5s;
-    z-index: 10000;
-    backdrop-filter: blur(10px);
-
-    .nav-aside-label {
-        cursor: pointer;
-        width: 20px;
-        height: 80px;
-        background-color: #d1d1d1;
-        color: #686666;
-        position: absolute;
-        right: -20px;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        line-height: 80px;
-        text-align: center;
-        border-radius: 0 5px 5px 0;
-        box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
-    }
-}
-
-#sideMenu-active:checked+.sideMenu {
-    transform: translateX(0);
-
-    label .fas {
-        transform: scaleX(-1);
-    }
-}
-
-#sideMenu-active {
-    position: fixed;
-    opacity: 0;
-    z-index: -1;
-    cursor: pointer;
-}
-
-.nav-aside {
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.nav-aside-header {
-    overflow: scroll;
-}
-
-.input-group {
-    background: rgba(61, 0, 166, 0.595);
-    padding: 30px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    left: 100%;
-    top: 0;
-    position: absolute;
-    display: block;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 8px;
-    margin: 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.input-group.not-visible {
-    display: none;
-}
-
-.nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-wight {
-    margin: 10 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-logo img {
-    width: 130px;
-    height: 50px;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.nav-links {
-    position: relative;
-    display: flex;
-    gap: 1rem;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-    position: relative;
-    padding: 0.5rem 1rem;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: #60a5fa;
-    transition: width 0.3s;
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-/* 滾動進度條 */
-.scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 3px;
-    background: linear-gradient(to right, #60a5fa, #93c5fd);
-    z-index: 1001;
-    transition: width 0.1s;
-}
-
-.nav-links a.active {
-    color: #60a5fa;
-}
-
-/* 首頁區塊 */
-.hero {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
-    /* overflow: hidden; */
-    will-change: auto;
-    top: 5vw;
-}
-
-.hero-content {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 1s forwards;
-    padding: 10px;
-}
-
-.hero h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
-}
-
-.hero p {
-    font-size: 1.5rem;
-    color: #94a3b8;
-    margin-bottom: 2rem;
-}
-
 .tools-container {
     max-width: 1000px;
     margin: auto;
@@ -1080,41 +764,58 @@ nav {
     color: #4CAF50;
 }
 
-/* 瀏覽次數 */
-.visitnumber {
-    margin: 300px auto;
+/* 留言 */
+.comment {
+    padding: 8rem 2rem;
+}
+
+.comment-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    text-align: center;
 }
 
-.visitnumber h1 {
-    font-family: 'Rampart One', cursive;
-    font-size: 10em;
+#auth-container {
+    margin-bottom: 10px;
 }
 
-.counter {
-    font-family: 'Rampart One', cursive;
-    font-size: 5em;
-    margin: 100vh auto 40vh;
+#note-container {
+    width: 80vw;
+    height: 80vh;
+    overflow: auto;
+    position: relative;
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid #0ff;
+    box-shadow: 0 0 20px #0ff;
+    padding: 20px;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 10px;
+    scrollbar-width: none;
 }
 
-.counter:not(.is-visible) {
-    visibility: hidden;
-}
-
-.userCounter {
-    font-family: 'Rampart One', cursive;
-    font-size: 5em;
-    margin: 100vh auto 40vh;
-}
-
-.userCounter:not(.is-visible) {
-    visibility: hidden;
-}
-
-#user-info {
-    font-family: 'Rampart One', cursive;
-    font-size: 3em;
+.note {
+    width: 180px;
+    height: 180px;
+    min-height: 100px;
+    background: #4e7aad;
+    padding: 10px;
+    box-shadow: 2px 2px 10px rgba(63, 104, 176, 0.638);
+    font-size: 14px;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    border-radius: 5px;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    position: relative;
+    border-style: outset;
+    border-width: 5px;
+    border-color: #004170;
 }
 
 /* 輸入框 */
@@ -1238,12 +939,8 @@ input[type="text"]::placeholder {
 
 /* 響應式設計 */
 @media (max-width: 768px) {
-    .nav-wight {
-        display: none;
-    }
-
     .visitnumber h1 {
-        font-size: 4rem;
+        font-size: 5em;
     }
 
     .counter {
@@ -1296,5 +993,9 @@ input[type="text"]::placeholder {
 
     #changeAnimation-btn {
         display: none;
+    }
+
+    #note-container {
+        justify-content: center;
     }
 }

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="alan_tsai的小屋">
+    <meta property="og:description" content="我是弱弱的寫程式新手，歡迎來這裡留下你的留言！">
+    <meta property="og:image" content="https://i.imgur.com/reW9Wxp.png">
+    <meta property="og:url" content="https://vercel.com/dds-projects-0a3234a7/dddayo0214-github-io">
+    <meta property="og:type" content="website">
+    <link rel="shortcut icon" href="merterial/apex-logo.ico" type="image/x-icon">
+    <title>Tsai alan的小屋</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://unpkg.com/counterup2@2.0.2/dist/index.js">	</script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <link rel="stylesheet" href="mywebside_css.css">
+    <link rel="stylesheet" href="comment.css">
+    <script src="comment.js" defer></script>
+
+</head>
+
+<body>
+    <div class="custom-cursor" id="bodytop">
+        <img class="rotationAnime" src="merterial/rocket.png" alt="custom cursor" id="bodytop_">
+    </div>
+    <div class="custom-cursorFollower">
+        <img class="rotationAnime" src="merterial/comet.png" alt="custom cursorFollower">
+    </div>
+    <div class="scroll-progress"></div>
+
+    <canvas id="canvas"></canvas>
+
+    <div>
+        <div class="image-overlay" id="學科能力競賽">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/市賽資訊佳作.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="多益">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/toeic715.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="ncku邀請賽">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/ncku邀請賽.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="英檢中級">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/英檢中級.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="動物育望">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/動物育望.jpg" alt="完整大圖">
+        </div>
+        <div class="image-overlay" id="獎牌">
+            <span class="close-btn">&times;</span>
+            <img id="fullImage" src="merterial/獎牌.jpg" alt="完整大圖">
+        </div>
+    </div>
+
+    <audio id="bg-music" autoplay loop>
+        <source src="merterial/gawr_gura_bgm.mp3" type="audio/mpeg">
+        您的瀏覽器不支援音訊元素。
+    </audio>
+
+    <nav>
+        <div class="nav-content" id="nav-content">
+            <div class="nav-wight">
+                <div class="nav-logo">
+                    <!-- <img src="merterial/hinano.png" alt="logo"> -->
+                </div>
+                <div class="logo">Tsai alan的歡樂小屋</div>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">首頁</a>
+                <a href="project.html">作品</a>
+                <a href="comment.html" class="active">留言</a>
+                <a href="code.html">部落格</a>
+                <div class="nav-indicator"></div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="comment" id="comment">
+        <div class="comment-container">
+            <div id="auth-container">
+                <button class="btn" id="login-btn">使用 Google 登入留言!</button>
+                <button class="btn" id="logout-btn" style="display: none;">登出</button>
+            </div>
+            <div id="user-info" style="display: none;">
+                <p>歡迎，<span id="user-name"></span>！</p>
+            </div>
+            <div class="input-container" id="input-area">
+                <input type="text" id="tech-input" placeholder="請輸入資料" onfocus="this.placeholder=''"
+                    onblur="this.placeholder='請輸入資料'">
+                <label for="tech-input"></label>
+            </div>
+            <div id="note-container"></div>
+        </div>
+    </section>
+
+    <div class="footer">Copyright &copy Tsai alan</div>
+
+</body>
+
+<script>
+    // 初始化 Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAPuD2i6aqk77vh7A6C3Nctri2m-YQrdjA",
+        authDomain: "my-webside-97ee7.firebaseapp.com",
+        databaseURL: "https://my-webside-97ee7-default-rtdb.firebaseio.com",
+        projectId: "my-webside-97ee7",
+        storageBucket: "my-webside-97ee7.appspot.com",
+        messagingSenderId: "131325164583",
+        appId: "1:131325164583:web:8c1cc0c4636d72e3916202",
+        measurementId: "G-HCZ5T7EK4F"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const database = firebase.database();
+
+    // 留言板功能
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const inputArea = document.getElementById("input-area");
+    const noteContainer = document.getElementById("note-container");
+    const noteInput = document.getElementById("tech-input");
+    let userTimes;
+
+    auth.onAuthStateChanged(user => { updateUI(user); });
+
+    loginBtn.addEventListener("click", () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider);
+    });
+
+    function createNote(text, timestamp, noteId, userId, displayName) {
+        if (!text.trim()) return;
+
+        const user = auth.currentUser;
+        const note = document.createElement("div");
+        note.dataset.id = noteId;
+        note.classList.add("note");
+        note.dataset.timestamp = timestamp;
+
+        // 顯示使用者名稱
+        const userLabel = document.createElement("div");
+        userLabel.classList.add("user-label");
+        userLabel.innerText = `✏️ ${displayName}`; // 顯示發送者名稱
+        userLabel.style.fontSize = "12px";
+        userLabel.style.fontWeight = "bold";
+        userLabel.style.color = "#333";
+        userLabel.style.marginBottom = "5px";
+
+        // 內容
+        const content = document.createElement("div");
+        content.classList.add("content");
+        content.innerText = text;
+
+        // 時間戳記
+        const timeLabel = document.createElement("div");
+        timeLabel.classList.add("timestamp");
+        timeLabel.innerText = timestamp;
+
+        note.appendChild(userLabel); // 加入使用者名稱
+        note.appendChild(content);
+        note.appendChild(timeLabel);
+
+        // ✅ 只有留言作者才能刪除
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "刪除";
+        deleteBtn.style.backgroundColor = "rgba(183, 5, 5, 0.638)";
+        deleteBtn.style.color = "white";
+        deleteBtn.style.border = "none";
+        deleteBtn.style.padding = "5px";
+        deleteBtn.style.cursor = "pointer";
+        deleteBtn.style.marginTop = "40px";
+        deleteBtn.addEventListener("click", () => {
+            if (user && user.uid === userId) {
+                if (confirm("確定要刪除這則留言嗎？")) {
+                    db.collection("notes").doc(noteId).delete().then(() => {
+                        console.log("留言已刪除");
+                    }).catch((error) => {
+                        console.error("刪除失敗:", error);
+                    });
+                }
+            }
+            else {
+                alert("只有留言作者才能刪除留言！");
+            }
+
+        }); note.appendChild(deleteBtn);
+        noteContainer.appendChild(note);
+    }
+
+    noteInput.addEventListener("keydown", function (e) {
+        const timestamp = new Date().toISOString();  // 改用 ISO 格式
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (user) {
+                let text = noteInput.value.trim();
+                // 🔥 限制便條紙數量（例如：最多 5 張）
+                const userNotes = db.collection("notes")
+                    .where("userId", "==", user.uid)
+                    .get()
+                    .then((userNotes) => {
+                        if (userNotes.size >= 5) {
+                            alert("你已經達到 5 則便條紙的上限，請先刪除舊的再新增！");
+                            return;
+                        }
+                        db.collection("notes").add({
+                            text: noteInput.value,
+                            timestamp,
+                            userId: user.uid,  // ✅ 記錄使用者的 UID
+                            displayName: user.displayName || "匿名用戶"  // ✅ 記錄用戶名稱，若無則顯示「匿名用戶」
+                        });
+                        noteInput.value = "";
+                    })
+                    .catch((error) => {
+                        console.error("獲取便條紙數量時出錯:", error);
+                    });
+
+                // 限制字數
+                if (text.length > 200) {
+                    alert("留言最多 200 字！");
+                    return;
+                }
+
+                // 過濾爆言
+                const bannedWords = ["髒話1", "髒話2", "禁詞"];
+                for (let word of bannedWords) {
+                    if (text.includes(word)) {
+                        alert("留言包含禁用詞彙！");
+                        return;
+                    }
+                }
+            }
+        }
+    });
+
+    db.collection("notes").orderBy("timestamp").onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+            if (change.type === "added") {
+                const doc = change.doc;
+                createNote(
+                    doc.data().text,
+                    doc.data().timestamp,
+                    doc.id,
+                    doc.data().userId,
+                    doc.data().displayName || "匿名用戶"
+                );
+            } else if (change.type === "removed") {
+                const note = document.querySelector(`[data-id="${change.doc.id}"]`);
+                if (note) {
+                    note.remove();
+                }
+            }
+        });
+    });
+
+    logoutBtn.addEventListener("click", () => {
+        auth.signOut().then(() => {
+            alert("已成功登出！");
+            updateUI(null); // 確保 UI 也同步更新
+        }).catch((error) => {
+            console.error("登出失敗:", error);
+            alert("登出失敗，請稍後再試！");
+        });
+    });
+
+    function updateUI(user) {
+        const userInfo = document.getElementById("user-info");
+        const userNameSpan = document.getElementById("user-name");
+
+        if (user) {
+            loginBtn.style.display = "none";
+            logoutBtn.style.display = "block";
+            inputArea.style.display = "block";
+
+            // 顯示使用者名稱
+            userInfo.style.display = "block";
+            userNameSpan.textContent = user.displayName || "訪客"; // 如果沒有名稱，顯示「訪客」
+        } else {
+            loginBtn.style.display = "block";
+            logoutBtn.style.display = "none";
+            inputArea.style.display = "none";
+
+            // 隱藏使用者資訊
+            userInfo.style.display = "none";
+        }
+    }
+
+    // 當登入狀態改變時更新 UI
+    auth.onAuthStateChanged(user => {
+        updateUI(user);
+    });
+
+</script>
+
+</html>

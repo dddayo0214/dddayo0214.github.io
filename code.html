@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="alan_tsai的小屋">
+    <meta property="og:description" content="我是弱弱的寫程式新手，歡迎來這裡留下你的留言！">
+    <meta property="og:image" content="https://i.imgur.com/reW9Wxp.png">
+    <meta property="og:url" content="https://vercel.com/dds-projects-0a3234a7/dddayo0214-github-io">
+    <meta property="og:type" content="website">
+    <link rel="shortcut icon" href="merterial/apex-logo.ico" type="image/x-icon">
+    <title>Tsai alan的小屋</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://unpkg.com/counterup2@2.0.2/dist/index.js">	</script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <link rel="stylesheet" href="mywebside_css.css">
+    <link rel="stylesheet" href="code.css">
+</head>
+
+<body>
+    <div class="custom-cursor" id="bodytop">
+        <img class="rotationAnime" src="merterial/rocket.png" alt="custom cursor" id="bodytop_">
+    </div>
+    <div class="custom-cursorFollower">
+        <img class="rotationAnime" src="merterial/comet.png" alt="custom cursorFollower">
+    </div>
+    <div class="scroll-progress"></div>
+
+    <canvas id="canvas"></canvas>
+
+    <nav>
+        <div class="nav-content" id="nav-content">
+            <div class="nav-wight">
+                <div class="nav-logo">
+                    <!-- <img src="merterial/hinano.png" alt="logo"> -->
+                </div>
+                <div class="logo">Tsai alan的歡樂小屋</div>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">首頁</a>
+                <a href="project.html">作品</a>
+                <a href="comment.html">留言</a>
+                <a href="code.html" class="active">部落格</a>
+                <div class="nav-indicator"></div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="notes">
+        <h2>演算法筆記查詢</h2>
+        <input type="text" id="searchBox" placeholder="輸入關鍵字查詢...">
+        <div id="notesContainer">
+            <div class="tool-card" onclick="toggleDescription('Dijastra')">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <a href="https://hackmd.io/9FWDA6jMQ9OR9LlQDkXU2Q" target="_blank" rel="noopener noreferrer"
+                        class="tool-title" id="note-links">Dijastra演算法</a>
+                </div>
+                <div class="tool-description" id="Dijastra-description">
+                    <p>Dijastra是常見的單點對單點最短路徑算法之一</p>
+                    <ul>
+                        <li>強大的智能代碼補全</li>
+                        <li>豐富的擴充套件生態系統</li>
+                        <li>整合式終端機</li>
+                        <li>Git版本控制整合</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tool-card" onclick="toggleDescription('Floyd')">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <a href="https://hackmd.io/GhkXS-W0Ss2vbD7_hStkCQ" target="_blank" rel="noopener noreferrer"
+                        class="tool-title" id="note-links">Floyd演算法</a>
+                </div>
+                <div class="tool-description" id="Floyd-description">
+                    <p>Floyd演算法是實用的點對點最短路徑算法之一</p>
+                    <ul>
+                        <li>Chrome DevTools用於網頁除錯</li>
+                        <li>Google Fonts免費字型資源</li>
+                        <li>Google搜尋控制台協助優化網站</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tool-card" onclick="toggleDescription('KMP')">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <a href="https://hackmd.io/6CSUOzcRQWWFxn4p6lSenw" target="_blank" rel="noopener noreferrer"
+                        class="tool-title" id="note-links">KMP演算法</a>
+                </div>
+                <div class="tool-description" id="KMP-description">
+                    <p>KMP演算法是用來字串匹配的實用算法之一</p>
+                    <ul>
+                        <li>Chrome DevTools用於網頁除錯</li>
+                        <li>Google Fonts免費字型資源</li>
+                        <li>Google搜尋控制台協助優化網站</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tool-card" onclick="toggleDescription('PicoCTF')">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <a href="https://hackmd.io/5LM2aoz-SvK2jZSMJbh1kA" target="_blank" rel="noopener noreferrer"
+                        class="tool-title" id="note-links">PicoCTF筆記</a>
+                </div>
+                <div class="tool-description" id="PicoCTF-description">
+                    <p>PicoCTF是好用的練習網站之一</p>
+                    <ul>
+                        <li>Chrome DevTools用於網頁除錯</li>
+                        <li>Google Fonts免費字型資源</li>
+                        <li>Google搜尋控制台協助優化網站</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tool-card" onclick="toggleDescription('CE')">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <a href="https://hackmd.io/5LM2aoz-SvK2jZSMJbh1kA" target="_blank" rel="noopener noreferrer"
+                        class="tool-title" id="note-links">CE筆記</a>
+                </div>
+                <div class="tool-description" id="CE-description">
+                    <p>CE是好用的工具之一</p>
+                    <ul>
+                        <li>Chrome DevTools用於網頁除錯</li>
+                        <li>Google Fonts免費字型資源</li>
+                        <li>Google搜尋控制台協助優化網站</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tool-card" onclick="toggleDescription('apex')">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <div class="apex-icon"></div>
+                    </div>
+                    <h2 class="tool-title">apex</h2>
+                </div>
+                <div class="tool-description" id="apex-description">
+                    <p>Apex是打發時間的好工具</p>
+                    <ul>
+                        <li>不須拘泥於輸贏</li>
+                        <li>隊友活潑好動</li>
+                        <li>牌位當普通場打</li>
+                        <li>商店商品滿滿</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer">Copyright &copy Tsai alan</div>
+
+    <script src="code.js"></script>
+</body>
+
+</html>
