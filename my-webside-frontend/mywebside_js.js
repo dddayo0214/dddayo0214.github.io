@@ -673,28 +673,6 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
 });
 
-// 輸入框動畫
-function createParticles(event) {
-    const inputElement = event.target;
-    const particlesContainer = document.getElementById('particles');
-    const rect = inputElement.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    // Create new particle
-    const particle = document.createElement('div');
-    particle.classList.add('particle');
-    particle.style.left = `${x} px`;
-    particle.style.top = `${y} px`;
-
-    particlesContainer.appendChild(particle);
-
-    // Remove particle after animation ends
-    setTimeout(() => {
-        particle.remove();
-    }, 1000);
-}
-
 //計數器動畫
 const counterUp = window.counterUp.default
 

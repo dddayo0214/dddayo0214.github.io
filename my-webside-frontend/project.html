@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="alan_tsai的小屋">
+    <meta property="og:description" content="我是弱弱的寫程式新手，歡迎來這裡留下你的留言！">
+    <meta property="og:image" content="https://i.imgur.com/reW9Wxp.png">
+    <meta property="og:url" content="https://vercel.com/dds-projects-0a3234a7/dddayo0214-github-io">
+    <meta property="og:type" content="website">
+    <link rel="shortcut icon" href="../merterial/apex-logo.ico" type="image/x-icon">
+    <title>Tsai alan的小屋</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://unpkg.com/counterup2@2.0.2/dist/index.js">	</script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <link rel="stylesheet" href="mywebside_css.css">
+    <link rel="stylesheet" href="project.css">
+    <script src="project.js" defer></script>
+
+</head>
+
+<body>
+    <div class="custom-cursor" id="bodytop">
+        <img class="rotationAnime" src="../merterial/rocket.png" alt="custom cursor" id="bodytop_">
+    </div>
+    <div class="custom-cursorFollower">
+        <img class="rotationAnime" src="../merterial/comet.png" alt="custom cursorFollower">
+    </div>
+    <div class="scroll-progress"></div>
+
+    <canvas id="canvas"></canvas>
+
+    <input type="checkbox" name="" id="sideMenu-active">
+
+    <nav>
+        <div class="nav-content" id="nav-content">
+            <div class="nav-wight">
+                <div class="nav-logo">
+                    <!-- <img src="merterial/hinano.png" alt="logo"> -->
+                </div>
+                <div class="logo">Tsai alan的歡樂小屋</div>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">首頁</a>
+                <a href="project.html" class="active">作品</a>
+                <a href="comment.html">留言</a>
+                <a href="code.html">部落格</a>
+                <div class="nav-indicator"></div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="projects" id="projects">
+        <h2>作品集</h2>
+        <div class="project-grid">
+            <div class="project-card" onclick="window.open('https://chatboxdesign.vercel.app/', '_blank')">
+                <img src="../merterial/對話框設計網頁.png" alt="對話框設計網頁">
+                <div class="project-info">
+                    <h3>對話框設計網頁</h3>
+                    <p>這個工具的目標是讓使用者可以直觀地調整對話框的外觀並能夠快速生成對應的 HTML 和 CSS 代碼</p>
+                </div>
+            </div>
+            <div class="project-card" onclick="window.open('https://text-game-omega.vercel.app/', '_blank')">
+                <img src="../merterial/文字遊戲.png" alt="文字遊戲">
+                <div class="project-info">
+                    <h3>文字遊戲</h3>
+                    <p>簡單的文字遊戲</p>
+                </div>
+            </div>
+            <div class="project-card" onclick="window.open('https://my-type-game.vercel.app/', '_blank')">
+                <img src="../merterial/打字忍者.png" alt="打字忍者">
+                <div class="project-info">
+                    <h3>打字忍者</h3>
+                    <p>簡單的打字遊戲</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="footer">Copyright &copy Tsai alan</div>
+
+</body>
+
+</html>

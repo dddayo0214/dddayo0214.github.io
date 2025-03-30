@@ -75,7 +75,7 @@
 .apex-icon {
     width: 64px;
     height: 64px;
-    background: url('merterial/apex-logo.png') no-repeat center/contain;
+    background: url('../merterial/apex-logo.png') no-repeat center/contain;
     filter: grayscale(100%) drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5));
     transition: transform 0.3s, filter 0.3s;
     cursor: pointer;
